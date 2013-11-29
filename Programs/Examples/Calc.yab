@@ -1,4 +1,6 @@
-#!/boot/home/config/bin/yab
+#!yab
+
+getdir()
 
 localize
 window open 100,50 to 320,320, "Calc", "CalcView"
@@ -123,7 +125,7 @@ while(inloop)
 				window set "About", "minimumto", 320, 191
 				window set "About", "maximumto", 320, 191
 
-				err = draw image 0,0, "img/image.png", "About"
+				err = draw image 0,0, This_dir$+"img/image.png", "About"
 				if(err>0) then
 					alert "Error loading image.png!"+str$(err), "Close", "warning"
 					window close "About"
@@ -164,3 +166,18 @@ sub calculate(a,type$,b)
 	return ret
 end sub
 
+//////////////////////////////////////////////////////////////////
+sub getdir()
+// find out in which directory we are   doesn't work on double-clicked scripts
+////////////////////////////////////////////////////////////////
+
+if (peek("isbound")) then
+	This_dir$ = peek$("directory")+"/"
+else
+	This_dir$ = trim$(system$("pwd"))+"/"
+fi
+
+
+
+
+end sub

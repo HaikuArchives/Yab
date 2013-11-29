@@ -114,7 +114,7 @@ UNIX and WINDOWS are defined at once; check your compiler settings
 
 #ifdef UNIX
 #ifndef LIBRARY_PATH
-#define LIBRARY_PATH "/boot/home/config/lib/yab"
+#define LIBRARY_PATH "/boot/home/config/settings/yab"
 #endif
 #endif
 

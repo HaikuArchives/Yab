@@ -689,13 +689,6 @@ void YabText::ICheckWordLists(int sol,int eol,std::vector<rgb_color>& colorVec)
 	}
 }
 
-void YabText::Cut(BClipboard* clipboard) {
-	int32 a,b;
-	GetSelection(&a, &b);
-	Insert("");
-	BTextView::Cut(clipboard);
-}
-
 void YabText::InsertText(const char* text,int32 length,int32 offset,const text_run_array* runner)
 {
 	hasChanged = true;

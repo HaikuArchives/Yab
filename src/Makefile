@@ -15,7 +15,8 @@
 ## Haiku stuff
 ##
 HAIKUTAB = YabTabView.o
-HAIKUOPT = -DHAIKU
+HAIKUOPT = -DHAIKU -DLIBRARY_PATH=\"`finddir B_USER_SETTINGS_DIRECTORY`/yab\"
+
 
 ##
 ## Use our own column list view
@@ -45,7 +46,8 @@ GPP_OPT = $(DBG) $(OPT) -I. -DHAVE_CONFIG -DUNIX $(HAIKUOPT)
 ##
 ## Libraries
 ##
-LIBPATH = -L/boot/home/config/lib  
+##LIBPATH = -L/boot/home/config/lib
+LIBPATH = -L/boot/system/lib    
 LIB = -lncurses -lbe -lroot -ltranslation -ltracker -lmedia -llocale 
 
 ## flags for flex (-d for debugging)

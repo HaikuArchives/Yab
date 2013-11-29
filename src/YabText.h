@@ -40,7 +40,6 @@ class YabText : public BTextView
 		// virtual bool CanEndLine(int32 offset);
 		// void LoadFile(entry_ref *ref);
 		virtual void MessageReceived(BMessage* msg);
-		void Cut(BClipboard* clipboard);
 
 		bool HasChanged();
 		void SetChanged(bool changed);

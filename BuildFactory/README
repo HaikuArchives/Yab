@@ -16,11 +16,11 @@ All libraries that are imported with import are recognized. Also libraries that 
 imported from within libraries.
 
 Libraries have to be placed either in the folder of the main file or in the yab lib
-folder "/boot/home/config/lib/yab"!
+folder "/boot/home/config/settings/yab"!
 
 The BuildFactory is to be used as follows:
 
-yab BuildFactory Outputfile Inputfile.yab
+yab BuildFactory Outputfile Inputfile.yab < applicationsig >
 
 from within the folder of the BuildFactory. The Outputfile is also placed there at the end.
 The Inputfile has to have its relative or complete path included of course.
@@ -48,11 +48,11 @@ Alle libraries, die mit import importiert werden, werden beachtet. Auch
 Libraries, die aus Libraries heraus importiert werden.
 
 Libraries haben entweder in dem Verzeichnis der Hauptdatei oder in dem 
-yab-lib-Ordner "/boot/home/config/lib/yab/" zu liegen!
+yab-lib-Ordner "/boot/home/config/settings/yab/" zu liegen!
 
 Aufgerufen muss die BuildFactory wie folgt:
 
-yab BuildFactory.yab OutputFile InputFile.yab
+yab BuildFactory.yab OutputFile InputFile.yab < applicationsig >
 
 aus dem Verzeichnis der BuildFactory heraus. Dort landet auch das 
 OutputFile. Zu dem InputFile.yab muss natürlich ein relativer oder 

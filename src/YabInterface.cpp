@@ -6209,16 +6209,20 @@ const char* YabInterface::ClipboardPaste()
 {
 	const char *text; 
 	int32 textlen; 
+	BString returnstring; 
 	BMessage *clip = (BMessage *)NULL; 
 
 	if (be_clipboard->Lock()) 
 	{ 
-		if (clip = be_clipboard->Data()) 
-			clip->FindData("text/plain", B_MIME_TYPE, (const void **)&text, &textlen); 
-		be_clipboard->Unlock(); 
+		BMessage *clip = be_clipboard->Data();
+		clip->FindData("text/plain", B_MIME_TYPE, (const void **)&text, &textlen); 
+		be_clipboard->Unlock();
+		if (text != NULL) {
+			returnstring.SetTo(text, textlen);
+		}
 	} 
 
-	return text;
+	return returnstring;
 }
 
 int YabInterface::NewAlert(const char* text, const char* button1, const char* button2, const char* button3, const char* option)
@@ -9167,7 +9171,7 @@ void YabInterface::SetLocalize(const char* path)
 {
 	if(yabCatalog)
 		delete yabCatalog;
-	yabCatalog = new BCatalog(path);
+	//yabCatalog = new BCatalog(path);
 }
 
 const int YabInterface::GetErrorCode()
@@ -9374,10 +9378,10 @@ void yi_StopLocalize()
 	localize = false;
 }
 
-void yi_SetLocalize2(const char* path, YabInterface *yab)
+void yi_SetLocalize2(const char* , YabInterface *yab) 
 {
 	localize = true;
-	yab->SetLocalize(path);
+	//yab->SetLocalize(path);
 }
 
 const char* yi_LoadFilePanel(const char* mode, const char* title, const char* directory, YabInterface *yab)

@@ -31,6 +31,7 @@ OPT = -O
 ##
 ## Libraries
 ##
-LIBPATH = -L/boot/home/config/lib  
+##LIBPATH = -L/boot/home/config/lib  
+LIBPATH = -L/boot/system/lib 
 LIB = -lncurses -lbe -lroot -ltranslation -ltracker -lmedia -llocale -lz
 
