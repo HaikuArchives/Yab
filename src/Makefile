@@ -26,11 +26,6 @@ APP_MIME_SIG=
 #%{
 # @src->@ 
 
-flex.c: yabasic.flex
-	flex $(FLEXFLAGS) -t yabasic.flex >flex.c
-bison.c: yabasic.bison
-	bison $(BISONFLAGS) --output-file bison.c yabasic.bison  
-
 #	specify the source files to use
 #	full paths or paths relative to the makefile can be included
 # 	all files, regardless of directory, will have their object
@@ -39,6 +34,9 @@ bison.c: yabasic.bison
 #	if two source files with the same name (source.c or source.cpp)
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
+FLEX = $(shell flex -i -I -L -s -t yabasic.flex >flex.c)
+BISON = $(shell bison -d -l -t -v  --output-file bison.c yabasic.bison)
+
 SRCS= CalendarControl.cpp ControlLook.cpp DateTextView.cpp MonthView.cpp MonthWindow.cpp \
 MouseSenseStringView.cpp Spinner.cpp SplitPane.cpp URLView.cpp YabBitmapView.cpp \
 YabControlLook.cpp YabFilePanel.cpp YabFilePanelLooper.cpp YabInterface.cpp YabList.cpp \
@@ -95,12 +93,6 @@ SYSTEM_INCLUDE_PATHS =
 #	source file directories are automatically included
 LOCAL_INCLUDE_PATHS = 
 
-## flags for flex (-d for debugging)
-FLEXFLAGS = -i -I -L -s
-
-## flags for bison (-t -v for debugging)
-BISONFLAGS = -d -l -t -v  
-
 #	specify the level of optimization that you desire
 #	NONE, SOME, FULL
 OPTIMIZE= FULL
@@ -118,7 +110,8 @@ LOCALES=
 #	to use.  For example, setting DEFINES to "DEBUG=1" will cause the
 #	compiler option "-DDEBUG=1" to be used.  Setting DEFINES to "DEBUG"
 #	would pass "-DDEBUG" on the compiler's command line.
-DEFINES= HAIKU LIBRARY_PATH=\"`finddir B_USER_SETTINGS_DIRECTORY`/yab\" HAVE_CONFIG UNIX
+DEFINES := LIBRARY_PATH=$(shell finddir B_USER_SETTINGS_DIRECTORY) 
+DEFINES += HAIKU HAVE_CONFIG_UNIX
 
 #	specify special warning levels
 #	if unspecified default warnings will be used
