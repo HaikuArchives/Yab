@@ -99,7 +99,7 @@ symbol.o: symbol.c yabasic.h config.h
 main.o: main.c yabasic.h config.h 
 	$(GCC) $(GCC_OPT) -c main.c -o main.o
 flex.c: yabasic.flex
-	./flex $(FLEXFLAGS) -t yabasic.flex >flex.c
+	flex $(FLEXFLAGS) -t yabasic.flex >flex.c
 bison.c: yabasic.bison 
 	bison $(BISONFLAGS) --output-file bison.c yabasic.bison  
 YabStackView.o: YabStackView.cpp YabStackView.h
