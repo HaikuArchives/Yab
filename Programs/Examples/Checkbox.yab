@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 dim Part$(1)
 window open 100, 100, 240, 300, "A", "Checkboxes"
