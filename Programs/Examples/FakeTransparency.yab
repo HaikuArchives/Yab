@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 SCREEN_W = peek("desktopwidth")
 SCREEN_H = peek("desktopheight")
