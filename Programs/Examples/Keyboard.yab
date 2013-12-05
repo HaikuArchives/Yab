@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 window open 200, 200 to 710, 600, "MainView" ,"YAB-Keyboard"
 window set "MainView", "flags", "not-h-resizable, not-v-resizable"
