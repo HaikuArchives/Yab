@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 window open 100,100 to 500,160, "Win", "Walk"
 window set "Win", "flags", "not-zoomable, not-h-resizable, not-v-resizable"
