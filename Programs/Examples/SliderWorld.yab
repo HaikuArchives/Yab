@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 window open 100,100 to 560,320, "WView", "SliderWorld"
 

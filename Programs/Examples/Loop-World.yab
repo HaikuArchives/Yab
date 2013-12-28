@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 // Main background colors:
 r = 206 : g = 226 : b = 236

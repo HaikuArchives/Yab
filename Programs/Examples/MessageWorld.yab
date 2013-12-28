@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 // MessageWorld - shows the messages the widgets return
 // by DasJott

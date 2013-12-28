@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 // Set Backgroundcolors as variables.
 bgr = 216 : bgg = 216 : bgb = 226

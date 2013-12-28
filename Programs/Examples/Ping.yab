@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 doc Start Ping.yab first by double clicking it,
 doc then start Pong.yab.

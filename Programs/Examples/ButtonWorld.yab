@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 window open 400,400 to 550,500, "MainView1", "ButtonWorld1"
 window open 600,400 to 750,500, "MainView2", "ButtonWorld2"
