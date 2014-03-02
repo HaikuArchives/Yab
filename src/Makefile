@@ -47,7 +47,9 @@ GPP_OPT = $(DBG) $(OPT) -I. -DHAVE_CONFIG -DUNIX $(HAIKUOPT)
 ## Libraries
 ##
 ##LIBPATH = -L/boot/home/config/lib
-LIBPATH = -L/boot/system/lib    
+LIBPATHS = $(shell findpaths B_FIND_PATH_LIB_DIRECTORY)
+LIBPATH=$(addprefix -L,$(LIBPATHS))
+##LIBPATH = -L`finddir B_SYSTEM_LIB_DIRECTORY` ##/boot/system/lib    
 LIB = -lncurses -lbe -lroot -ltranslation -ltracker -lmedia -llocale 
 
 ## flags for flex (-d for debugging)
