@@ -37,7 +37,7 @@ ARCHITECTURE " at " BUILD_TIME "\n\n      " COPYRIGHT "\n\n"
 
 /* ------------- external references ---------------- */
 
-extern int yylineno;   /* current line number */
+extern int mylineno;   /* current line number */
 extern int yyparse();  /* call bison parser */
 
 
@@ -229,7 +229,7 @@ int mmain(int argc,char **argv, YabInterface* y)
   if (errorlevel>ERROR) create_docu_array();
 
   add_command(cEND,NULL);
-  sprintf(string,"read %d line(s) and generated %d command(s)",yylineno,commandcount);
+  sprintf(string,"read %d line(s) and generated %d command(s)",mylineno,commandcount);
   error(NOTE,string);
   
   time(&compilation_end);
@@ -370,7 +370,7 @@ struct command *add_command(int type,char *name)
   
   if (infolevel>=DEBUG) std_diag("creating",type,name);
   cmdhead->type=type;  /* store command */
-  cmdhead->line=yylineno;
+  cmdhead->line=mylineno;
   cmdhead->lib=currlib;
   cmdhead->cnt=commandcount;
   if (!name || !*name) 
@@ -1674,7 +1674,7 @@ void error(int severity, char *messageline)
      /* reports an basic error to the user and possibly exits */
 {
   if (program_state==COMPILING)
-    error_with_line(severity,messageline,yylineno);
+    error_with_line(severity,messageline,mylineno);
   else if (program_state==RUNNING && current->line>0) 
     error_with_line(severity,messageline,current->line);
   else 
@@ -1730,7 +1730,7 @@ void error_with_line(int severity, char *message,int line)
     if (line>=0) {
       if (program_state==COMPILING) {
 	f=currlib->l;
-	l=yylineno;
+	l=mylineno;
       } else if (program_state==RUNNING && current->line>0) {
 	f=current->lib->l;
 	l=current->line;

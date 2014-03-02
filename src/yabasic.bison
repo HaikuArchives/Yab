@@ -30,7 +30,7 @@
 void __yy_bcopy(char *,char *,int); /* prototype missing */
 
 int tileol; /* true, read should go to eon of line */
-int yylineno=1; /* line number; counts fresh in every new file */
+int mylineno=1; /* line number; counts fresh in every new file */
 int main_lineno=1; /* line number of main */
 int function_type=ftNONE; /* contains function type while parsing function */
 char *current_function=NULL; /* name of currently parsed function */
@@ -150,7 +150,7 @@ program: statement_list tEOPROG {YYACCEPT;}
 
 statement_list: statement
   | statement_list {if (errorlevel<=ERROR) {YYABORT;}} 
-    tSEP {if ($3>=0) yylineno+=$3; else switchlib();} statement
+    tSEP {if ($3>=0) mylineno+=$3; else switchlib();} statement
   ;
 
 statement:  /* empty */
@@ -675,7 +675,7 @@ call_item: string_expression
   | expression
   ;
  
-function_definition: export tSUB {missing_endsub++;missing_endsub_line=yylineno;pushlabel();report_missing(WARNING,"do not define a function in a loop or an if-statement");if (function_type!=ftNONE) {error(ERROR,"nested functions not allowed");YYABORT;}}
+function_definition: export tSUB {missing_endsub++;missing_endsub_line=mylineno;pushlabel();report_missing(WARNING,"do not define a function in a loop or an if-statement");if (function_type!=ftNONE) {error(ERROR,"nested functions not allowed");YYABORT;}}
 	function_name {if (exported) create_sublink($4); create_label($4,cUSER_FUNCTION);
 	               add_command(cPUSHSYMLIST,NULL);add_command(cCLEARREFS,NULL);firstref=lastref=lastcmd;
 		       create_numparam();}
@@ -729,7 +729,7 @@ paramitem: tSYMBOL {create_require(stNUMBER);create_makelocal(dotify($1,FALSE),s
   | tSTRSYM '(' ')' {create_require(stSTRINGARRAYREF);create_arraylink(dotify($1,FALSE),stSTRINGARRAYREF);}
   ;
 
-for_loop: tFOR {missing_next++;missing_next_line=yylineno;} tSYMBOL tEQU 
+for_loop: tFOR {missing_next++;missing_next_line=mylineno;} tSYMBOL tEQU 
             {pushname(dotify($3,FALSE)); /* will be used by next_symbol to check equality */
 	     add_command(cRESETSKIPONCE,NULL);
 	     pushgoto();add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);}
@@ -771,8 +771,8 @@ switch_number_or_string: tSWITCH {push_switch_id();add_command(cPUSH_SWITCH_MARK
                 number_or_string sep_list case_list default tSEND {create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);create_break_mark(0,-1);add_command(cBREAK_HERE,NULL);create_clean_switch_mark(0,FALSE);pop_switch_id();}
   ;
 
-sep_list: tSEP {if ($1>=0) yylineno+=$1;} 
-  | sep_list tSEP {if ($2>=0) yylineno+=$2;} 
+sep_list: tSEP {if ($1>=0) mylineno+=$1;} 
+  | sep_list tSEP {if ($2>=0) mylineno+=$2;} 
   ;
 
 number_or_string: expression
@@ -787,11 +787,11 @@ case_list: /* empty */
 
 
 default: /* empty */
-  | tDEFAULT tSEP {if ($2>=0) yylineno+=$2; create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);} statement_list
+  | tDEFAULT tSEP {if ($2>=0) mylineno+=$2; create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);} statement_list
   ;
 
 
-do_loop: tDO {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_loop++;missing_loop_line=yylineno;pushgoto();}
+do_loop: tDO {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_loop++;missing_loop_line=mylineno;pushgoto();}
 	      statement_list
             loop
   ;
@@ -802,7 +802,7 @@ loop: tEOPROG {if (missing_loop) {sprintf(string,"%d loop(s) are missing (last a
   ;
 
 
-while_loop: tWHILE {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=yylineno;pushgoto()} '(' expression ')'
+while_loop: tWHILE {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=mylineno;pushgoto()} '(' expression ')'
 	      {add_command(cDECIDE,NULL);
 	      pushlabel();}
 	      statement_list
@@ -814,7 +814,7 @@ wend: tEOPROG {if (missing_wend) {sprintf(string,"%d wend(s) are missing (last a
   ;
 
 
-repeat_loop: tREPEAT {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=yylineno;pushgoto();} 
+repeat_loop: tREPEAT {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=mylineno;pushgoto();} 
 	       statement_list
 	     until
   ;
@@ -825,7 +825,7 @@ until: tEOPROG {if (missing_until) {sprintf(string,"%d until(s) are missing (las
   ;
 
 if_clause: tIF expression {add_command(cDECIDE,NULL);storelabel();pushlabel();}
-           tTHEN {missing_endif++;missing_endif_line=yylineno;} statement_list {swap();matchgoto();swap();poplabel();}
+           tTHEN {missing_endif++;missing_endif_line=mylineno;} statement_list {swap();matchgoto();swap();poplabel();}
 	   elsif_part
            else_part {poplabel();}
            endif
