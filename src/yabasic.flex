@@ -22,7 +22,7 @@
 #include "yabasic.h"     /* definitions of yabasic */
 #endif
 extern int main_lineno; /* defined in yabasic.bison: line number of main file */
-extern int yylineno; /* defined in yabasic.bison: line number of main file */
+extern int mylineno; /* defined in yabasic.bison: line number of main file */
 int import_lib(char *); /* import library */
 
 #define MAX_INCLUDE_DEPTH 5
@@ -444,7 +444,7 @@ int import_lib(char *name) /* import library */
   if (end_of_import) return TRUE;
 
   /* start line numbers anew */
-  libfile_stack[include_stack_ptr]->lineno=yylineno;
+  libfile_stack[include_stack_ptr]->lineno=mylineno;
  
   include_stack_ptr++;
   if (include_stack_ptr>=MAX_INCLUDE_DEPTH) {
@@ -553,7 +553,7 @@ void switchlib(void) /* switch library, called by bison */
     error(DEBUG,string);
   }
   currlib=libfile_stack[include_stack_ptr];
-  yylineno=currlib->lineno;
+  mylineno=currlib->lineno;
   inlib=(include_stack_ptr>0);
 }
 

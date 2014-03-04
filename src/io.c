@@ -54,7 +54,7 @@
 
 /* ------------- external references ---------------- */
 
-extern int yylineno;   /* current line number */
+extern int mylineno;   /* current line number */
 extern int yyparse();  /* call bison parser */
 
 

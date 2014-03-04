@@ -23,7 +23,7 @@
 
 /* ------------- external references ---------------- */
 
-extern int yylineno;   /* current line number */
+extern int mylineno;   /* current line number */
 extern int yyparse();  /* call bison parser */
 
 
@@ -534,7 +534,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     pointer=my_malloc(2);
     i=(int)floor(a1->value);
     if (i>255 || i<0) {
-      sprintf(string,"can´t convert %g to character",a1->value);
+      sprintf(string,"can't convert %g to character",a1->value);
       error(ERROR,string);
       return;
     }

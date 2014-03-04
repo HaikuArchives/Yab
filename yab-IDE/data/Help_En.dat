@@ -10,7 +10,7 @@ Conditions and Loops
 Data Processing
 Input and Output
 Graphical User Interface
-Localization
+&Localization
 Sound
 String Handling
 Subroutines
@@ -273,8 +273,8 @@ Bitmaps:bitmap save
 Bitmaps:bitmap remove 
 Bitmaps:bitmap get
 Bitmaps:bitmap
-Localization:translate$()
-Localization:localize
+&Localization:translate$()
+&Localization:localize
 Sound:sound wait
 Sound:sound stop
 Sound:sound play
