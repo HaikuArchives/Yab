@@ -8,7 +8,9 @@ Yab allows fast prototyping with simple and clean code. yab contains a large num
 
 Compiling
 ---------------------
-Just run `make` in `src`.
+run `make` in `src`.
+run fixattributes.sh
 
 LICENSE: Artistic License -- Create your own stand-alone binaries with yab under any license you want.  
-AUTHOR: jan__64 
+AUTHOR: jan__64
+		bbjimmy 
