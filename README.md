@@ -1,14 +1,10 @@
 Yab
 ===
-yab is a complete BASIC programming language for Haiku. It allows fast prototyping with simple and clean code. yab contains a huge amount of BeAPI specific commands for GUI and much, much more.
+Yab is a complete BASIC programming language for Haiku.
 
-yab wouldn't be complete without the yab-IDE, a powerful development environment, which of course is programmed in yab itself.
 
-The BuildFactory allows you to recompile and bind your yab program with the yab interpreter as one stand-alone program.
+Yab allows fast prototyping with simple and clean code. yab contains a large number of BeAPI specific commands for GUI creation and much, much more. This package includes only the yab binary and documentation.
 
-Furthermore, several examples and documentation give you a fast introduction to yab.
-
-The new Localizer makes localization easy. It also supports old ZETA locale files.
 
 Compiling
 ---------------------
