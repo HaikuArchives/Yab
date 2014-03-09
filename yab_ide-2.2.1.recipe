@@ -17,6 +17,7 @@ SECONDARY_ARCHITECTURE="!x86_gcc2 !x86"
 #SOURCE_DIR="yab_ide-$portVersion"
 
 PROVIDES="
+	yab=1.7.02
 	yab_ide$secondaryArchSuffix = $portVersion
 	cmd:yab$secondaryArchSuffix
 	"
