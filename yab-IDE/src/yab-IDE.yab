@@ -3826,12 +3826,10 @@ end sub
 
 sub set_up_BuildFactory()
 local DataDir$
-local SysDevDir$
-local UserDevDir$
+
 local handel
 local ddir$
-SysDevDir$=trim$(system$("finddir B_SYSTEM_DEVELOP_DIRECTORY"))
-UserDevDir$=trim$(system$("finddir B_USER_DEVELOP_DIRECTORY"))
+
 DataDir$=trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))
 
 
@@ -3856,13 +3854,13 @@ if x=0  or y>0 then
 
 	while(not eof(#handle)) 
 		input #handle a$ 
-		system("cp -u "+ddir$+"/sources/yab-1.7.02-2/sources/src/"+a$+" "+DataDir$+"/yab_1.7.02/BuildFactory/"+a$)
+		system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_1.7.02/BuildFactory/"+a$)
 	end while
 	
 
 	close handle
 
-	system("cp -ur "+ddir$+"/sources/yab-1.7.02-2/sources/src/column "+DataDir$+"/yab_1.7.02/BuildFactory")
+	system("cp -ur "+ideDir$+"/src/column "+DataDir$+"/yab_1.7.02/BuildFactory")
 end if	
 
 end sub
