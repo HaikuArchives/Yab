@@ -7,8 +7,8 @@ HOMEPAGE="http://sourceforge.net/projects/yab-interpreter"
 SRC_URI="git+https://github.com/bbjimmy/Yab.git"
 REVISION="2"
 
-LICENSE="Artistic
-	GNU GPL v2"
+LICENSE="Artistic"
+
 COPYRIGHT="1995-2006 Marc-Oliver Ihm (yabasic)
 	2006-2009 Jan Bungeroth (yab improvements)
 	2013 Jim Saxton ( yab improvements)"
