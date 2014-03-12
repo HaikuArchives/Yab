@@ -13,8 +13,8 @@ COPYRIGHT="1995-2006 Marc-Oliver Ihm (yabasic)
 	2006-2009 Jan Bungeroth (yab improvements)
 	2013 Jim Saxton ( yab improvements)"
 
-ARCHITECTURES="x86_gcc2 !x86 !x86_64"
-SECONDARY_ARCHITECTURE="!x86_gcc2 !x86"
+ARCHITECTURES="x86_gcc2 x86 !x86_64"
+SECONDARY_ARCHITECTURE="!x86_64"
 
 #SOURCE_DIR="yab-$portVersion"
 
@@ -44,8 +44,10 @@ BUILD_PREREQUIRES="
 	"
 
 BUILD()
-{
-	cd src
+{	
+	mkdir tmp
+	cp -r src/* tmp
+	cd tmp
 	make $jobArgs BUILDHOME=`finddir B_SYSTEM_DEVELOP_DIRECTORY`
 	unzip -o App_YAB.zip
 	copyattr App_YAB yab
@@ -58,10 +60,14 @@ INSTALL()
 	
 	mkdir -p $binDir
 	
-	cp src/yab  $binDir/
+	cp tmp/yab  $binDir/
 	
 	mkdir -p $documentationDir
 	
 	cp -r Documentation/ $documentationDir/yab-1.7.02
+	
+	mkdir -p $appsDir/yab-IDE
+
+	cp -r src $appsDir/yab-IDE/src
 	
 }
