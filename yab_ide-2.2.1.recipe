@@ -11,20 +11,19 @@ COPYRIGHT="1995-2006 Marc-Oliver Ihm (yabasic)
 	2006-2009 Jan Bungeroth (yab improvements)
 	2013 Jim Saxton ( yab improvements)"
 
-ARCHITECTURES="x86_gcc2 !x86 !x86_64"
-SECONDARY_ARCHITECTURE="!x86_gcc2 !x86"
+ARCHITECTURES="x86_gcc2 x86 !x86_64"
+SECONDARY_ARCHITECTURE="!x86_64"
 
 #SOURCE_DIR="yab_ide-$portVersion"
 
 PROVIDES="
-	yab=1.7.02
 	yab_ide$secondaryArchSuffix = $portVersion
-	cmd:yab$secondaryArchSuffix
-	"
+		"
 
 REQUIRES="
 	haiku$secondaryArchSuffix >= $haikuVersion
 	ncurses >= 5.9
+	yab >= 1.7.02
 	devel:libncurses$secondaryArchSuffix
 	devel:libz$secondaryArchSuffix	
 	"
@@ -73,16 +72,13 @@ INSTALL()
 	BuildFactory.yab yab-IDE yab-IDE.yab application/x-vnd.yab-IDE	
 	cd ..
 	cd ..
- 	unzip  -o  src/App_YAB.zip -d src/
-	
-	copyattr  src/App_YAB src/yab
-	cp src/yab  $binDir/
+ 	
 	
 	mkdir -p $appsDir
 	cp -r yab-IDE/ $appsDir/
 	cp  tmp/buildfactory/yab-IDE $appsDir/yab-IDE/
-	cp -r src/* $appsDir/yab-IDE/src/
-
+	cp yab-IDE/src/yab-IDE.yab $appsDir/yab-IDE/src/
+	
 
 	
 }
