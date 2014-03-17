@@ -59,8 +59,7 @@ INSTALL()
 	
 	mkdir -p $binDir
 	
-	mkdir -p $documentationDir
-	cp -r Documentation/ $documentationDir/yab-1.7.02
+	
 
 	mkdir -p tmp
 	mkdir -p tmp/buildfactory

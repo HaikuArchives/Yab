@@ -18,11 +18,11 @@ if(LoadSettings() = 1) then
 	
 
 	settingsYabDir$ = path$ //"/boot/apps/yab-1.7/"
-	globalProjectDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_1.7.02/Programs/" //"/boot/apps/yab-1.7/Programs/"
+	globalProjectDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_work/Programs/" //"/boot/apps/yab-1.7/Programs/"
 	yabDir$ = yabpath$()
 	ideDir$ = path$ //settingsYabDir$ + "yab-IDE/"
 	
-	buildDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_1.7.02/BuildFactory/" //yab-1.7/BuildFactory/"
+	buildDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_work/BuildFactory/" //yab-1.7/BuildFactory/"
 	globalHelpDir$ = settingsYabDir$ + "Documentation/"
 
 	settingsLangUse = true
@@ -3835,13 +3835,13 @@ DataDir$=trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))
 
 print " ideDir$ "+ideDir$
 
-x=system("mkdir "+DataDir$+"/yab_1.7.02")
-y=system("ls "+DataDir$+"/yab_1.7.02/BuildFactory")
-y=y+system("ls "+DataDir$+"/yab_1.7.02/Programs")
+x=system("mkdir "+DataDir$+"/yab_work")
+y=system("ls "+DataDir$+"/yab_work/BuildFactory")
+y=y+system("ls "+DataDir$+"/yab_work/Programs")
 if x=0  or y>0 then
-	system("cp -ur "+ideDir$+"/BuildFactory "+DataDir$+"/yab_1.7.02")
-	system ("unzip -o "+DataDir$+"/yab_1.7.02/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_1.7.02/BuildFactory/parts")
-	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_1.7.02")
+	system("cp -ur "+ideDir$+"/BuildFactory "+DataDir$+"/yab_work")
+	system ("unzip -o "+DataDir$+"/yab_work/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_work/BuildFactory/parts")
+	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
 
 
 
@@ -3850,17 +3850,17 @@ if x=0  or y>0 then
 	x = system("ls "+UserDevDir$+"/sources/yab-1.7.02-2/")
 		if x=0 ddir$=UserDevDir$
 
-	handle=open(DataDir$+"/yab_1.7.02/BuildFactory/srcfiles","r")
+	handle=open(DataDir$+"/yab_work/BuildFactory/srcfiles","r")
 
 	while(not eof(#handle)) 
 		input #handle a$ 
-		system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_1.7.02/BuildFactory/"+a$)
+		system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_work/BuildFactory/"+a$)
 	end while
 	
 
 	close handle
 
-	system("cp -ur "+ideDir$+"/src/column "+DataDir$+"/yab_1.7.02/BuildFactory")
+	system("cp -ur "+ideDir$+"/src/column "+DataDir$+"/yab_work/BuildFactory")
 end if	
 
 end sub
