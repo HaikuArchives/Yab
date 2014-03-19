@@ -3799,7 +3799,7 @@ path$="/"+path$
 else
 path$=trim$(peek$("directory") )
 path$=path$+"/"
-print path$
+
 end if
 end sub
 
@@ -3833,7 +3833,7 @@ local ddir$
 DataDir$=trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))
 
 
-print " ideDir$ "+ideDir$
+
 
 x=system("mkdir "+DataDir$+"/yab_work")
 y=system("ls "+DataDir$+"/yab_work/BuildFactory")
@@ -3844,7 +3844,7 @@ if x=0  or y>0 then
 	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
 
 	handle=open(DataDir$+"/yab_work/BuildFactory/srcfiles","r")
-	print handle
+	
 
 		while(not eof(#handle)) 
 			input #handle a$ 
@@ -3858,8 +3858,6 @@ end if
 x=1
 open #1, ideDir$+"/src/YabMain.cpp","r"
 open #2, DataDir$+"/yab_work/BuildFactory/parts/YabMain.cpp.end","w"
-print handle
-print handle1
 
 while(not eof(#1)) 
 	line input #1 a$
