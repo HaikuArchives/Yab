@@ -3843,25 +3843,33 @@ if x=0  or y>0 then
 	system ("unzip -o "+DataDir$+"/yab_work/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_work/BuildFactory/parts")
 	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
 
-
-
-	x = system("ls "+SysDevDir$+"/sources/yab-1.7.02-2/")
-		if x=0 	ddir$=SysDevDir$
-	x = system("ls "+UserDevDir$+"/sources/yab-1.7.02-2/")
-		if x=0 ddir$=UserDevDir$
-
 	handle=open(DataDir$+"/yab_work/BuildFactory/srcfiles","r")
+	print handle
 
-	while(not eof(#handle)) 
-		input #handle a$ 
-		system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_work/BuildFactory/"+a$)
-	end while
-	
-
+		while(not eof(#handle)) 
+			input #handle a$ 
+			system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_work/BuildFactory/"+a$)
+		end while
 	close handle
 
 	system("cp -ur "+ideDir$+"/src/column "+DataDir$+"/yab_work/BuildFactory")
-end if	
+end if
+
+x=1
+open #1, ideDir$+"/src/YabMain.cpp","r"
+open #2, DataDir$+"/yab_work/BuildFactory/parts/YabMain.cpp.end","w"
+print handle
+print handle1
+
+while(not eof(#1)) 
+	line input #1 a$
+	if x>9  then 
+	print #2 a$
+	end if
+	x=x+1
+wend 
+close #1
+close #2
 
 end sub
 	

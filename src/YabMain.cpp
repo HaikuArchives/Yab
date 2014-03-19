@@ -7,6 +7,8 @@ char t[1024];
 const char* readSignature(int argc, char** argv)
 {
 	BString tmp("application/x-vnd.yab-app");
+	/* Do not make changes above this comment without changing yab-IDE
+	 to compensate for these changes.*/ 	
 	for(int i=1; i<argc; i++)
 	{
 		if(argv[i][0]!='-')
