@@ -1,5 +1,5 @@
 #!yab
-
+sleep .01
 window open 100,100 to 400, 200, "WView", "EvenMoreControls"
 layout "none", "WView"
 colorcontrol 10,10, "CC", "WView"

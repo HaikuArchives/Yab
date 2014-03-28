@@ -32,6 +32,9 @@ OPT = -O
 ## Libraries
 ##
 ##LIBPATH = -L/boot/home/config/lib  
-LIBPATH = -L/boot/system/lib 
+##LIBPATH = -L/boot/system/lib
+LIBPATHS = $(shell findpaths B_FIND_PATH_DEVELOP_LIB_DIRECTORY)
+LIBPATH=$(addprefix -L,$(LIBPATHS))
+ 
 LIB = -lncurses -lbe -lroot -ltranslation -ltracker -lmedia -llocale -lz
 

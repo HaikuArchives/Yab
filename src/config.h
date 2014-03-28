@@ -3,9 +3,9 @@
 
 #define BEOS
 // #define LIBBSVG 
-#define BUILD_TIME "Di Jan 24 12:00:00 CEST 2012"
+#define BUILD_TIME "21:32:36 Mon Mar 3 PST 2014"
 /* Version number of package */
-#define VERSION "1.7"
+#define VERSION "1.7.2"
 /* architecture of build machine */
 #define UNIX_ARCHITECTURE "BePC-Haiku"
 

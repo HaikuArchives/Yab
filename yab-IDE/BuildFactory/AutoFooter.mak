@@ -1,8 +1,11 @@
 ##
 ## GCC Options
 ##
+
+SH=$(shell finddir B_SYSTEM_HEADERS_DIRECTORY)
+UH= $(shell finddir B_USER_HEADERS_DIRECTORY)
 GCC = gcc
-GCC_OPT = $(DBG) $(OPT) -I. -I/boot/home/config/include/ -I/boot/home/config/include/ncurses/ -DHAVE_CONFIG -DUNIX $(HAIKUOPT)
+GCC_OPT = $(DBG) $(OPT) -I. $(addprefix -I,$(SH)) $(addprefix -I,$(UH)) -DHAVE_CONFIG -DUNIX $(HAIKUOPT)
 GPP = g++
 GPP_OPT = $(DBG) $(OPT) -I. -DHAVE_CONFIG -DUNIX $(HAIKUOPT)
 

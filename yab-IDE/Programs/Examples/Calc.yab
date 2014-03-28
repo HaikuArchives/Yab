@@ -1,15 +1,16 @@
 #!yab
+sleep .01
+This_dir$ = getdir$("Calc.yab")
 
-getdir()
-
-localize
+//localize
 window open 100,50 to 320,320, "Calc", "CalcView"
 
+
 draw set "bgcolor", 100, 150, 220, "Calc"
-draw set "lowcolor", 100, 150, 220, "Calc"
+draw set "lowcolor", 100, 190, 100, "Calc"
 draw set "highcolor", 255, 255, 255, "Calc"
 window set "Calc", "minimumto", 220, 260
-window set "Calc", "maximumto", 250, 300
+window set "Calc", "maximumto", 220, 260
 
 layout "all", "Calc"
 
@@ -102,7 +103,7 @@ while(inloop)
 				display$="0"
 				break
 			case "bC"
-			case translate$("Calc:File:Reset")
+			case "Calc:File:Reset"
 				result=0
 				draw rect 20,30 to 170,60, "Calc"
 				draw flush "Calc"
@@ -110,14 +111,14 @@ while(inloop)
 				display$="0"
 				type$ = "+"
 				break
-			case translate$("Calc:File:Quit")
-			case translate$("Calc:_QuitRequested")
+			case "Calc:File:Quit"
+			case "Calc:_QuitRequested"
 				 window close "Calc"
 				break
-			case translate$("Calc:Help:Help...")
+			case "Calc:Help:Help..."
 				alert "Calc demonstrates how to program\n a calculator in yab.\n\n", "Ok", "info"
 				break
-			case translate$("Calc:Help:About...")
+			case "Calc:Help:About..."
 				window open 250,100 to 570,291, "About", "About"
 				window set "About", "look", "bordered"
 				window set "About", "feel", "modal-app"
@@ -167,17 +168,35 @@ sub calculate(a,type$,b)
 end sub
 
 //////////////////////////////////////////////////////////////////
-sub getdir()
-// find out in which directory we are   doesn't work on double-clicked scripts
+sub getdir$( programname$)
+// find out in which directory we are in 
 ////////////////////////////////////////////////////////////////
+local path$
+local catch 
+catch=0
+if (!peek("isbound")) then
+	path$=system$("ps")
+	x=instr(path$,"/"+programname$)
+	path$=left$(path$,x)
+	for x=len(path$)-1 to 1 step -1
+		if (instr(path$," ",x) and catch=0) catch=x+1
+	next
+	path$=right$(path$,len(path$)-catch) 
+	path$=trim$(path$)
+	if path$="/" then
+		  path$ = trim$(system$("pwd"))+"/"
+	else
+		path$="/"+path$
+	endif
 
-if (peek("isbound")) then
-	This_dir$ = peek$("directory")+"/"
 else
-	This_dir$ = trim$(system$("pwd"))+"/"
-fi
+path$=trim$(peek$("directory") )
+path$=path$+"/"
 
+end if
 
-
-
+return path$
 end sub
+
+
+

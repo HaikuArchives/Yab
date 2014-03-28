@@ -104,7 +104,7 @@ sub ShowSource(CurrSource$)
 	draw flush "SourceView"
 	draw flush "ExplainView"
 
-	draw text 5, 10, "#!/boot/home/config/bin/yab", "SourceView"
+	draw text 5, 10, "#!yab", "SourceView"
 	draw text 5, 35, "window open 100, 100 to 200, 200, ''MainView'', ''Loop''", "SourceView"
 	draw text 5, 50, "window set ''MainView'', ''minimumto'',100,100", "SourceView"
 	draw text 5, 65, "window set ''MainView'', ''maximumto'',100,100", "SourceView"
@@ -347,7 +347,7 @@ sub ExecSource(ExecLoop$)
 				
 			if (n = 15) then
 				draw flush "SourceView"
-				draw text 5, 10, "#!/boot/home/config/bin/yab", "SourceView"
+				draw text 5, 10, "#!yab", "SourceView"
 				draw text 5, 35, "window open 100, 100 to 200, 200, ''MainView'', ''Loop''", "SourceView"
 				draw text 5, 50, "window set ''MainView'', ''minimumto'',100,100", "SourceView"
 				draw text 5, 65, "window set ''MainView'', ''maximumto'',100,100''", "SourceView"

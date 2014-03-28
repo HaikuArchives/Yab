@@ -1,4 +1,4 @@
-#!/boot/home/config/bin/yab
+#!yab
 
 doc Author: Jan Bungeroth
 doc Thanks to: Genki, Lelldorin, lorglas, Stargater, DasJott
@@ -6,7 +6,7 @@ doc (c) 2006-2012 in terms of the Artistic License
 doc
 doc The yab-IDE provides you with an integrated development suite for yab
 doc Enjoy.
-
+path()
 
 settingsRCSOff = true
 globalConfigDir$ = "/boot/home/config/settings/yab-ide/"
@@ -14,13 +14,15 @@ globalConfigDir$ = "/boot/home/config/settings/yab-ide/"
 if(LoadSettings() = 1) then
 
 	MAXFILES = 20
-	DEBUG = false
+	DEBUG = true
+	
 
-	settingsYabDir$ = "/boot/apps/yab-1.7/"
-	globalProjectDir$ = "/boot/apps/yab-1.7/Programs/"
-	yabDir$ = "/boot/home/config/bin/yab"
-	ideDir$ = settingsYabDir$ + "yab-IDE/"
-	buildDir$ = "/boot/apps/yab-1.7/BuildFactory/"
+	settingsYabDir$ = path$ //"/boot/apps/yab-1.7/"
+	globalProjectDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_work/Programs/" //"/boot/apps/yab-1.7/Programs/"
+	yabDir$ = yabpath$()
+	ideDir$ = path$ //settingsYabDir$ + "yab-IDE/"
+	
+	buildDir$ = trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))+"/yab_work/BuildFactory/" //yab-1.7/BuildFactory/"
 	globalHelpDir$ = settingsYabDir$ + "Documentation/"
 
 	settingsLangUse = true
@@ -69,6 +71,7 @@ if(LoadSettings() = 1) then
 	next i
 
 endif
+
 
 restartSettingsLangUse = settingsLangUse
 textcolor_r = 0
@@ -620,8 +623,8 @@ while(inloop)
 			case MyTranslate$("MainView:Help:Online Resources:Yabasic Homepage...")
                                 system("open http://www.yabasic.de &")
                                 break 
-			case MyTranslate$("MainView:Help:Online Resources:Team Maui...")
-                                system("open http://www.team-maui.de &")
+			case MyTranslate$("MainView:Help:Online Resources:Haikuware Yab forum...")
+                                system("open http://haikuware.com/forum/yab &")
                                 break 
 			case MyTranslate$("MainView:Help:About...")
 				AboutWindow()
@@ -960,6 +963,7 @@ sub OpenMainWindow()
 	window set "Splash", "look", "bordered"
 	err = draw image 0,0, ideDir$+"img/Splash.png", "Splash"
 	window set "Splash", "moveto", x/2-250,y/2-200
+	set_up_BuildFactory()
 	if(err>0) window close "Splash"
 	
 	window set "MainView", "look", "document"
@@ -1041,7 +1045,7 @@ sub OpenMainWindow()
 	submenu "Help", "Online Resources", "German BeUsergroup...", "", "MainView"
 	submenu "Help", "Online Resources", "BeSly Database...", "", "MainView"
 	submenu "Help", "Online Resources", "Yabasic Homepage...", "", "MainView"
-	submenu "Help", "Online Resources", "Team Maui...", "", "MainView"
+	submenu "Help", "Online Resources", "Haikuware Yab forum...", "", "MainView"
 	menu "Help", "--", "", "MainView"
 	menu "Help", "About...", "", "MainView"
 
@@ -1276,8 +1280,9 @@ sub OpenMainWindow()
 	draw line 0,1 to 2000,1, "Statusbar"
 	draw set "highcolor", 239,239,239, "Statusbar"
 	draw line 0,2 to 2000,2, "Statusbar"
-
+	
 	if(window count>1) window close "Splash"
+
 	window set "MainView", "moveto", settingsX, settingsY
 
 	return
@@ -1859,7 +1864,7 @@ sub RunProgram(yabFile$)
 
 	w = draw get "text-width", GetFileName$(yabFile$), "Running"
 	text 143-w/2,32, "TRunning", GetFileName$(yabFile$), "Running"
-	button 150,50 to 240,70, "BRunning", "Break", "Running"
+	button 150,50 to 240,75, "BRunning", "Break", "Running"
 
 	draw set "Bitstream Vera Sans, Bold Oblique, 14", "Running"
 	w = draw get "text-width", MyTranslate$("Running Program"), "Running"
@@ -1978,18 +1983,18 @@ sub AboutWindow()
 		draw set "Swis721 BT, Bold, 18", "AboutWindow"
 	endif
 	width = draw get "text-width", "yab-IDE", "AboutWindow"
-	draw text 200-width/2, 30, "yab-IDE", "AboutWindow"
+	draw text 200-width/2, 25, "yab-IDE", "AboutWindow"
 	if(peek$("os") = "Haiku") then
 		draw set "DejaVu Sans, Bold, 10", "AboutWindow"
 	else
 		draw set "Swis721 BT, Bold, 10", "AboutWindow"
 	endif
-	width = draw get "text-width", "Version 2.2", "AboutWindow"
-	draw text 200-width/2, 40, "Version 2.2", "AboutWindow"
+	width = draw get "text-width", "Version 2.2.1", "AboutWindow"
+	draw text 200-width/2, 40, "Version 2.2.1", "AboutWindow"
 
 	t = draw image 100,50 to 300,-1, ideDir$+"img/yablogo.png", "AboutWindow"
 
-	button 100,270 to 300,290, "AboutButton", "Close", "AboutWindow"
+	button 100,265 to 300,290, "AboutButton", "Close", "AboutWindow"
 	option set "AboutButton", "focus", true
 
 	window set "AboutWindow", "moveto", x,y
@@ -2178,6 +2183,7 @@ sub Building()
 	local msg$(1)
 	local i, n, tmp
 	
+	
 	x = (peek("desktopwidth")-500)/2
 	y = (peek("desktopheight")-400)/2-50
 	if(y<50) y=50
@@ -2193,12 +2199,21 @@ sub Building()
 	else
 		binName$= globalAllNames$(globalCurrentText)+".bin"
 	endif
+	
+	while (instr(binName$, "/"))
+		pos=instr(binName$, "/")
+		binName$=right$(binName$,len(binName$)-pos)
+		wend
+	
+	
 	isEmpty = false
 
 	textcontrol 10,50 to 380,70, "BuildPath", "Target file name:", binName$, "BuildWindow"
-	button 390,50 to 490,70, "BuildBrowse", "Browse", "BuildWindow"
+	AppSig$="application/x-vnd.yab-app"
+	textcontrol 10,80 to 380,100, "AppSig", "Application Signature:", AppSig$, "BuildWindow"
+	//button 390,50 to 490,70, "BuildBrowse", "Browse", "BuildWindow"
 
-	button 390,100 to 490,120, "BuildBuild", "Create Binary", "BuildWindow" 
+	button 390,100 to 490,130, "BuildBuild", "Create Binary", "BuildWindow" 
 
 	MyLine(0,140,500,140, "BuildWindow")
 	textedit 10,155 to 490,390, "BuildOutput", 3, "BuildWindow"
@@ -2225,30 +2240,36 @@ sub Building()
 				case "BuildBuild"
 					option set "BuildBuild", "enabled", false
 					option set "BuildPath", "enabled", false
-					option set "BuildBrowse", "enabled", false
+					//option set "BuildBrowse", "enabled", false
+					option set "AppSig", "enabled", false
+					AppSig$=textcontrol get$ "AppSig"
+					if AppSig$="" AppSig$="application/x-vnd.yab-app"
+					binName$=textcontrol get$ "BuildPath"
 					textedit add "BuildOutput", MyTranslate$("Please wait, processing... (this may take a long time!)\n\n")
-					if(DEBUG) print "cd "+buildDir$+"; "+yabDir$+" BuildFactory.yab "+binName$+" "+globalAllNames$(globalCurrentText)+" 2>&1"
-					result$ = system$("cd "+buildDir$+"; "+yabDir$+" BuildFactory.yab "+binName$+" "+globalAllNames$(globalCurrentText)+" 2>&1")
+					print "cd "+buildDir$+"; "+yabDir$+" BuildFactory.yab "+binName$+" "+globalAllNames$(globalCurrentText)+" "+AppSig$+" 2>&1\n\n"
+					result$ = system$("cd "+buildDir$+";  yab BuildFactory.yab "+binName$+" "+globalAllNames$(globalCurrentText)+" "+AppSig$+" yab-ide  2>&1")
 					textedit add "BuildOutput", result$
+					
 
 					option set "BuildBuild", "enabled", true
 					option set "BuildPath", "enabled", true 
-					option set "BuildBrowse", "enabled", true 
-
-					if(IfExists(binName$)) then
+					//option set "BuildBrowse", "enabled", true 
+					option set "AppSig", "enabled", true
+					
+					if(IfExists(buildDir$+"/"+binName$)) then
 						alert "Build was successful", "Ok", "info"
 					else
 						alert "Build failed!", "Ok", "warning"
 					endif
-					system("open "+ GetDirectory$(binName$))
+					system("rm "+ buildDir$+"/"+binName$)
 					break
-				case "BuildBrowse"
-					t$ = filepanel "save-file", "Save", GetDirectory$(binName$)
-					if(t$<>"") then
-						textcontrol set "BuildPath", t$
-						binName$ = t$
-					endif
-					break
+				//case "BuildBrowse"
+				//	t$ = filepanel "save-file", "Save", GetDirectory$(binName$)
+				//	if(t$<>"") then
+				//		textcontrol set "BuildPath", t$
+				//		binName$ = t$
+				//	endif
+				//	break
 				case "_QuitRequested"
 				case "BuildWindow:_QuitRequested"
 					inloop = false
@@ -2256,13 +2277,18 @@ sub Building()
 			end switch
 		next i
 		if(not isEmpty and textcontrol get$ "BuildPath" = "") then
+			AppSig$=textcontrol get$ "AppSig"
 			option set "BuildBuild", "enabled", false
 			isEmpty = true
 		endif
 		if(isEmpty and textcontrol get$ "BuildPath" <> "") then
+			AppSig$=textcontrol get$ "AppSig"
 			option set "BuildBuild", "enabled", true
 			isEmpty = false
 		endif
+		
+		
+		
 	wend
 	window close "BuildWindow"
 	return
@@ -3757,3 +3783,91 @@ sub SaveSettings()
 	endif
 	return
 end sub
+
+sub path()
+if (!peek("isbound")) then
+path$=system$("ps")
+x=instr(path$,"/yab-IDE.yab")
+path$=left$(path$,x)
+for x=len(path$)-1 to 1 step -1
+	if (instr(path$," ",x) and catch=0) catch=x+1
+next
+path$=right$(path$,len(path$)-catch) 
+path$=trim$(path$)
+path$="/"+path$
+
+else
+path$=trim$(peek$("directory") )
+path$=path$+"/"
+
+end if
+end sub
+
+
+sub yabpath$()
+
+if system("test -e /boot/home/config/non-packaged/bin/yab") = 0 then
+	return "/boot/home/config/non-packaged/bin/yab"
+elseif system("test -e /boot/home/config/bin/yab") = 0 then
+ 		return "/boot/home/config/bin/yab"
+elseif system("test -e /boot/system/bin/yab") = 0 then
+ 		return "/boot/system/bin/yab"
+
+endif
+
+local cmd$
+cmd$="test -e "+settingsYabDir$
+if system(cmd$)=0 then 
+	return settingsYabDir$
+endif
+
+return "error"
+end sub
+
+sub set_up_BuildFactory()
+local DataDir$
+
+local handel
+local ddir$
+
+DataDir$=trim$(system$("finddir B_USER_NONPACKAGED_DATA_DIRECTORY"))
+
+
+
+
+x=system("mkdir "+DataDir$+"/yab_work")
+y=system("ls "+DataDir$+"/yab_work/BuildFactory")
+y=y+system("ls "+DataDir$+"/yab_work/Programs")
+if x=0  or y>0 then
+	system("cp -ur "+ideDir$+"/BuildFactory "+DataDir$+"/yab_work")
+	system ("unzip -o "+DataDir$+"/yab_work/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_work/BuildFactory/parts")
+	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
+
+	handle=open(DataDir$+"/yab_work/BuildFactory/srcfiles","r")
+	
+
+		while(not eof(#handle)) 
+			input #handle a$ 
+			system("cp -u "+ideDir$+"/src/"+a$+" "+DataDir$+"/yab_work/BuildFactory/"+a$)
+		end while
+	close handle
+
+	system("cp -ur "+ideDir$+"/src/column "+DataDir$+"/yab_work/BuildFactory")
+end if
+
+x=1
+open #1, ideDir$+"/src/YabMain.cpp","r"
+open #2, DataDir$+"/yab_work/BuildFactory/parts/YabMain.cpp.end","w"
+
+while(not eof(#1)) 
+	line input #1 a$
+	if x>9  then 
+	print #2 a$
+	end if
+	x=x+1
+wend 
+close #1
+close #2
+
+end sub
+	

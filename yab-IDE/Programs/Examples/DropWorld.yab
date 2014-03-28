@@ -1,5 +1,6 @@
 #!yab
 
+
 window open 100,100 to 300,300, "WView", "DropWorld"
 
 text 20,5, "Txt1", "Drop any file here:", "WView"

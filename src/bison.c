@@ -98,7 +98,7 @@
 void __yy_bcopy(char *,char *,int); /* prototype missing */
 
 int tileol; /* true, read should go to eon of line */
-int yylineno=1; /* line number; counts fresh in every new file */
+int mylineno=1; /* line number; counts fresh in every new file */
 int main_lineno=1; /* line number of main */
 int function_type=ftNONE; /* contains function type while parsing function */
 char *current_function=NULL; /* name of currently parsed function */
@@ -5400,7 +5400,7 @@ yyreduce:
 
   case 5:
 
-    {if ((yyvsp[(3) - (3)].sep)>=0) yylineno+=(yyvsp[(3) - (3)].sep); else switchlib();;}
+    {if ((yyvsp[(3) - (3)].sep)>=0) mylineno+=(yyvsp[(3) - (3)].sep); else switchlib();;}
     break;
 
   case 12:
@@ -7439,7 +7439,7 @@ yyreduce:
 
   case 445:
 
-    {missing_endsub++;missing_endsub_line=yylineno;pushlabel();report_missing(WARNING,"do not define a function in a loop or an if-statement");if (function_type!=ftNONE) {error(ERROR,"nested functions not allowed");YYABORT;};}
+    {missing_endsub++;missing_endsub_line=mylineno;pushlabel();report_missing(WARNING,"do not define a function in a loop or an if-statement");if (function_type!=ftNONE) {error(ERROR,"nested functions not allowed");YYABORT;};}
     break;
 
   case 446:
@@ -7561,7 +7561,7 @@ yyreduce:
 
   case 476:
 
-    {missing_next++;missing_next_line=yylineno;;}
+    {missing_next++;missing_next_line=mylineno;;}
     break;
 
   case 477:
@@ -7639,12 +7639,12 @@ yyreduce:
 
   case 489:
 
-    {if ((yyvsp[(1) - (1)].sep)>=0) yylineno+=(yyvsp[(1) - (1)].sep);;}
+    {if ((yyvsp[(1) - (1)].sep)>=0) mylineno+=(yyvsp[(1) - (1)].sep);;}
     break;
 
   case 490:
 
-    {if ((yyvsp[(2) - (2)].sep)>=0) yylineno+=(yyvsp[(2) - (2)].sep);;}
+    {if ((yyvsp[(2) - (2)].sep)>=0) mylineno+=(yyvsp[(2) - (2)].sep);;}
     break;
 
   case 494:
@@ -7664,12 +7664,12 @@ yyreduce:
 
   case 498:
 
-    {if ((yyvsp[(2) - (2)].sep)>=0) yylineno+=(yyvsp[(2) - (2)].sep); create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);;}
+    {if ((yyvsp[(2) - (2)].sep)>=0) mylineno+=(yyvsp[(2) - (2)].sep); create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);;}
     break;
 
   case 500:
 
-    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_loop++;missing_loop_line=yylineno;pushgoto();;}
+    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_loop++;missing_loop_line=mylineno;pushgoto();;}
     break;
 
   case 502:
@@ -7684,7 +7684,7 @@ yyreduce:
 
   case 504:
 
-    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=yylineno;pushgoto();}
+    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=mylineno;pushgoto();}
     break;
 
   case 505:
@@ -7705,7 +7705,7 @@ yyreduce:
 
   case 509:
 
-    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=yylineno;pushgoto();;}
+    {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=mylineno;pushgoto();;}
     break;
 
   case 511:
@@ -7725,7 +7725,7 @@ yyreduce:
 
   case 514:
 
-    {missing_endif++;missing_endif_line=yylineno;;}
+    {missing_endif++;missing_endif_line=mylineno;;}
     break;
 
   case 515:
