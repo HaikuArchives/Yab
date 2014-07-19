@@ -2134,9 +2134,12 @@ sub SaveAsTemplate()
 end sub
 
 sub SaveCurrentFile()
+local savetext$
 	handle = open(globalAllNames$(globalCurrentText), "w")
         if(handle) then
-        	print #handle textedit get$ "Text"+str$(globalCurrentText);
+		savetext$=textedit get$ "Text"+str$(globalCurrentText)
+		if right$(savetext$,1)<>chr$(10) savetext$=savetext$+chr$(10)
+        	print #handle savetext$;
         	close(handle)
 		tmpCurrentLine = textedit get "Text"+str$(globalCurrentText), "currentline"
 		print "ATTR SET ";
