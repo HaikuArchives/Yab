@@ -7,6 +7,7 @@ doc
 doc The yab-IDE provides you with an integrated development suite for yab
 doc Enjoy.
 path()
+versionnumber$="2.2.2"
 
 settingsRCSOff = true
 globalConfigDir$ = "/boot/home/config/settings/yab-ide/"
@@ -962,9 +963,14 @@ sub OpenMainWindow()
 	window open x/2-250-3000, y/2-200-3000 to x/2+249-3000,y/2+199-3000, "Splash", ""
 	window set "Splash", "look", "bordered"
 	err = draw image 0,0, ideDir$+"img/Splash.png", "Splash"
+	draw set "HighColor", 56,61,127, "Splash" 
+	draw set "DejaVu Sans Mono,Book,18", "Splash"
+	draw text 20, 272, "Version "+versionnumber$, "Splash"
 	window set "Splash", "moveto", x/2-250,y/2-200
 	set_up_BuildFactory()
 	if(err>0) window close "Splash"
+	
+	
 	
 	window set "MainView", "look", "document"
 	window set "MainView", "MinimumTo", 600,300
@@ -1989,8 +1995,8 @@ sub AboutWindow()
 	else
 		draw set "Swis721 BT, Bold, 10", "AboutWindow"
 	endif
-	width = draw get "text-width", "Version 2.2.1", "AboutWindow"
-	draw text 200-width/2, 40, "Version 2.2.1", "AboutWindow"
+	width = draw get "text-width", "Version "+versionnumber$, "AboutWindow"
+	draw text 200-width/2, 40, "Version "+versionnumber$, "AboutWindow"
 
 	t = draw image 100,50 to 300,-1, ideDir$+"img/yablogo.png", "AboutWindow"
 
