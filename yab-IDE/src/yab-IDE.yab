@@ -964,8 +964,8 @@ sub OpenMainWindow()
 	window set "Splash", "look", "bordered"
 	err = draw image 0,0, ideDir$+"img/Splash.png", "Splash"
 	draw set "HighColor", 56,61,127, "Splash" 
-	draw set "DejaVu Sans Mono,Book,18", "Splash"
-	draw text 20, 272, "Version "+versionnumber$, "Splash"
+	draw set "DejaVu Sans Mono,Bold,18", "Splash"
+	draw text 30, 280, "Version "+versionnumber$, "Splash"
 	window set "Splash", "moveto", x/2-250,y/2-200
 	set_up_BuildFactory()
 	if(err>0) window close "Splash"
