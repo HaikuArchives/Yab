@@ -3,7 +3,7 @@
 
 #define BEOS
 // #define LIBBSVG 
-#define BUILD_TIME "21:32:36 Mon Mar 3 PST 2014"
+#define BUILD_TIME __DATE__
 /* Version number of package */
 #define VERSION "1.7.2"
 /* architecture of build machine */
