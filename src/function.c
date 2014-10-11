@@ -1,14 +1,14 @@
-/*  
+/*
 
     YABASIC ---  a simple Basic Interpreter
     written by Marc-Oliver Ihm 1995-2004
     homepage: www.yabasic.de
-    
+
     function.c --- code for functions
-    
-    This file is part of yabasic and may be copied only 
-    under the terms of either the Artistic License or 
-    the GNU General Public License (GPL), both of which 
+
+    This file is part of yabasic and may be copied only
+    under the terms of either the Artistic License or
+    the GNU General Public License (GPL), both of which
     can be found at www.yabasic.de
 
 */
@@ -66,7 +66,7 @@ void token(struct command *cmd) /* extract token from variable */
   char *del,*line;
   int wasdel,isdel;
 
-  
+
   if (cmd->type==cSPLIT2 || cmd->type==cTOKEN2)
     del=pop(stSTRING)->pointer;
   else
@@ -107,7 +107,7 @@ void token(struct command *cmd) /* extract token from variable */
   ar->pointer=my_malloc((num+1)*sizeof(char *));
   pp=ar->pointer;
   pp[0]=my_strdup("");
-  
+
   /* extract tokens */
   i=1;
   isdel=TRUE;
@@ -125,7 +125,7 @@ void token(struct command *cmd) /* extract token from variable */
       if (!*p) break;
     }
   }
-      
+
   ar->bounds[0]=num+1;
  token_done:
   s=push();
@@ -140,13 +140,13 @@ void tokenalt(struct command *cmd) /* extract token from variable with alternate
   struct stackentry *t;
   char *old,*new,*tok;
   int split;
-  
+
   if (cmd->type==cSPLITALT2 || cmd->type==cTOKENALT2)
     del=pop(stSTRING)->pointer;
   else
     del=" \t";
   split=(cmd->type==cSPLITALT || cmd->type==cSPLITALT2);
-  
+
   t=pop(stSTRING);
   old=t->pointer;
   t->pointer=NULL; /* prevent push from freeing the memory */
@@ -185,10 +185,10 @@ void glob(void) /* check, if pattern globs string */
   char *str,*pat;
   struct stackentry *stack;
   int res;
-  
+
   pat=(char *)pop(stSTRING)->pointer;
   str=(char *)pop(stSTRING)->pointer;
-  
+
   res=do_glob(str,pat);
   stack=push();
   stack->value=res;
@@ -199,7 +199,7 @@ void glob(void) /* check, if pattern globs string */
 static int do_glob(char *str,char *pat) /* actually do the globbing */
 {
   int res;
-  
+
   if (infolevel>=DEBUG) {
     sprintf(string,"globbing '%s' on '%s'",str,pat);
     error(DEBUG,string);
@@ -234,7 +234,7 @@ void concat() /* concatenates two strings from stack */
 {
   struct stackentry *c;
   char *aa,*bb,*cc;
-  
+
   aa=pop(stSTRING)->pointer;
   bb=pop(stSTRING)->pointer;
   cc=(char *) my_malloc(sizeof(char)*(strlen(aa)+strlen(bb)+1));
@@ -243,13 +243,13 @@ void concat() /* concatenates two strings from stack */
   c=push();
   c->type=stSTRING;
   c->pointer=cc;
-}  
+}
 
 
 void create_changestring(int type) /* create command 'changestring' */
 {
   struct command *cmd;
-  
+
   cmd=add_command(cCHANGESTRING,FALSE);
   cmd->args=type;
 }
@@ -262,15 +262,15 @@ void changestring(struct command *current) /* changes a string */
   char *oldstring;
   int i,len;
   struct stackentry *a1;
-  
+
   type=current->args;
   newpart=pop(stSTRING)->pointer;
   if (type>fTWOARGS) a3=(int)pop(stNUMBER)->value;
   if (type>fONEARGS) a2=(int)pop(stNUMBER)->value;
   a1=pop(stSTRING);
-  oldstring=a1->pointer; 
+  oldstring=a1->pointer;
   a1->pointer=NULL; /* this prevents push from freeing the memory */
-  
+
   if (!oldstring || !*oldstring) return;
   switch(type) {
   case fMID:
@@ -315,9 +315,9 @@ void create_function(int type) /* create command 'function' */
 /* type can be sin,cos,mid$ ... */
 {
   struct command *cmd;
-  
+
   cmd=add_command(cFUNCTION,FALSE);
-  cmd->args=type;  
+  cmd->args=type;
 }
 
 
@@ -342,7 +342,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
   if (type>fONEARGS) a2=pop(stSTRING_OR_NUMBER);
   if (type>fZEROARGS) a1=pop(stSTRING_OR_NUMBER);
   linenum = current->line;
-  
+
   switch (type) {
   case fSIN:
     value=sin(a1->value);
@@ -612,12 +612,12 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
       pointer=strstr(str,str2);
     else
       pointer=NULL;
-    if (pointer==NULL) 
+    if (pointer==NULL)
       value=0;
     else
       value=pointer-str+1;
     result=stNUMBER;
-    break;   
+    break;
   case fINSTR2:
     str=a1->pointer;
     str2=a2->pointer;
@@ -627,13 +627,13 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     } else {
       if (start<1) start=1;
       pointer=strstr(str+start-1,str2);
-      if (pointer==NULL) 
+      if (pointer==NULL)
 	value=0;
       else
 	value=pointer-str+1;
     }
     result=stNUMBER;
-    break;   
+    break;
   case fRINSTR:
     str=a1->pointer;
     str2=a2->pointer;
@@ -641,7 +641,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     for(i=strlen(str)-1;i>=0;i--) if (!strncmp(str+i,str2,len)) break;
     value=i+1;
     result=stNUMBER;
-    break;   
+    break;
   case fRINSTR2:
     str=a1->pointer;
     str2=a2->pointer;
@@ -655,7 +655,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
       value=i+1;
     }
     result=stNUMBER;
-    break;   
+    break;
   case fDATE:
     pointer=my_malloc(100);
     time(&datetime);
@@ -766,9 +766,9 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     result = stNUMBER;
     break;
   case fMOUSEMOVE: //vasper
-    pointer = getmousein(yab,linenum, current->lib->s); 
+    pointer = getmousein(yab,linenum, current->lib->s);
     result = stSTRING;
-    break;    
+    break;
   case fDRAWIMAGE:
     str=a3->pointer;
     str2=a4->pointer;
@@ -935,7 +935,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     str2=a2->pointer;
     value = viewgetnum(str,str2,yab,linenum, current->lib->s);
     result = stNUMBER;
-    break;    
+    break;
   case fDRAWGET1:
     str=a1->pointer;
     str2=a2->pointer;
@@ -1064,7 +1064,7 @@ void function(struct command *current,YabInterface* yab) /* performs a function 
     error(ERROR,"function called but not implemented");
     return;
   }
-  
+
   stack=push();
   /* copy result */
   stack->type=result;
@@ -1094,7 +1094,7 @@ static int do_system2(char *cmd) /* execute command as system */
   SECURITY_ATTRIBUTES prosec;
   SECURITY_ATTRIBUTES thrsec;
   char *comspec;
-		
+
   ZeroMemory(&prosec,sizeof(prosec));
   prosec.nLength=sizeof(prosec);
   prosec.bInheritHandle=TRUE;
@@ -1102,7 +1102,7 @@ static int do_system2(char *cmd) /* execute command as system */
   thrsec.nLength=sizeof(thrsec);
   thrsec.bInheritHandle=TRUE;
   ZeroMemory(&start,sizeof(start));
-  start.cb=sizeof(STARTUPINFO); 
+  start.cb=sizeof(STARTUPINFO);
   start.dwFlags=STARTF_USESTDHANDLES;
   start.hStdOutput=GetStdHandle(STD_OUTPUT_HANDLE);
   start.hStdError=GetStdHandle(STD_ERROR_HANDLE);
@@ -1121,7 +1121,7 @@ static int do_system2(char *cmd) /* execute command as system */
   CloseHandle(proc.hProcess);
   CloseHandle(proc.hThread);
   return ec;
-#endif  
+#endif
 }
 
 
@@ -1147,7 +1147,7 @@ char *recall_buff() /* recall store buffer */
   struct buff_chain *curr,*old;
   char *result;
   int done,len;
-		
+
   result=(char *)my_malloc(buffcount*(SYSBUFFLEN+1));
   curr=buffroot;
   len=0;
@@ -1178,9 +1178,9 @@ static char *do_system(char *cmd) /* executes command via command.com */
   SECURITY_ATTRIBUTES thrsec;
   char *comspec;
 #endif
-  
+
   clear_buff();
-  
+
 #ifdef UNIX
   p=popen(cmd,"r");
   if (p==NULL) {
@@ -1202,25 +1202,25 @@ static char *do_system(char *cmd) /* executes command via command.com */
     store_buff(buff,len);
   } while(c!=EOF);
   pclose(p);
-		
-#else	     
+
+#else
   ZeroMemory(&prosec,sizeof(prosec));
   prosec.nLength=sizeof(prosec);
   prosec.bInheritHandle=TRUE;
   ZeroMemory(&thrsec,sizeof(thrsec));
   thrsec.nLength=sizeof(thrsec);
   thrsec.bInheritHandle=TRUE;
-		
+
   /* create pipe for writing */
   CreatePipe(&piperead,&pipewrite,&prosec,0);
-		
+
   ZeroMemory(&start,sizeof(start));
-  start.cb=sizeof(STARTUPINFO); 
+  start.cb=sizeof(STARTUPINFO);
   start.dwFlags=STARTF_USESTDHANDLES;
   start.hStdOutput=pipewrite;
   start.hStdError=pipewrite;
   start.hStdInput=GetStdHandle(STD_INPUT_HANDLE);
-		
+
   comspec=getenv("COMSPEC");
   if (!comspec) comspec="command.com";
   sprintf(string,"%s /C %s",comspec,cmd);
@@ -1231,7 +1231,7 @@ static char *do_system(char *cmd) /* executes command via command.com */
     return my_strdup("");
   }
   CloseHandle(pipewrite);
-		
+
   do {
     /* wait for output to arrive */
     if (!ReadFile(piperead,buff,SYSBUFFLEN,(LPDWORD)&len,NULL))
@@ -1253,13 +1253,13 @@ void getmousexybm(char *s,int *px,int *py,int *pb,int *pm) /* get mouse coordina
 {
   int x=0,y=0,b=0,m=0;
   char c;
-  
+
   if (*s) {
     sscanf(s,"MB%d%c+%d:%04d,%04d",&b,&c,&m,&x,&y);
     if (px) *px=x;
     if (py) *py=y;
     if (pb) {
-      if (c=='d') 
+      if (c=='d')
         *pb=b;
       else
         *pb=-b;
@@ -1281,7 +1281,7 @@ static char *dec2other(double d,int base) /* convert double to hex or binary num
   double dec,dec2;
   char *other;
   int negative=FALSE;
-  
+
   if (d<0) {
     dec2=floor(-d);
     negative=TRUE;
@@ -1308,7 +1308,7 @@ static double other2dec(char *hex,int base) /* convert hex or binary to double n
   static char *digits="0123456789abcdef";
   char *found;
   int i,len;
-  
+
   if (base!=2 && base !=16) {
     sprintf(string,"Cannot convert base-%d numbers",base);
     error(ERROR,string);
@@ -1340,7 +1340,7 @@ int myformat(char *dest,double num,char *format,char *sep) /* format number acco
   int neg=FALSE;
   double ip,fp,round;
   static char *digits="0123456789";
-  
+
   form=format;
   if (*form=='%') { /* c-style format */
     strcpy(ctrl,"+- #0"); /* allowed control chars for c-format */
@@ -1348,7 +1348,7 @@ int myformat(char *dest,double num,char *format,char *sep) /* format number acco
     while((found=strchr(ctrl,*form))!=NULL) {
       *found='?';
       form++;
-    } 
+    }
     if (sscanf(form,"%u.%u%c%n",&i1,&i2,&c1,&i)!=3 &&
 	sscanf(form,"%u.%c%n",&i2,&c1,&i)!=2 &&
 	sscanf(form,".%u%c%n",&i2,&c1,&i)!=2 &&
@@ -1372,7 +1372,7 @@ int myformat(char *dest,double num,char *format,char *sep) /* format number acco
       } else if (*form=='.') {
 	dots++;
       } else if (*form=='#') {
-	if (dots) 
+	if (dots)
 	  post++;
 	else
 	  pre++;
@@ -1400,7 +1400,7 @@ int myformat(char *dest,double num,char *format,char *sep) /* format number acco
 	  if (format[i]=='#') {
 	    digit=((int)ip)%10;
 	    ip/=10;
-	    if (((int)ip) || digit>0) 
+	    if (((int)ip) || digit>0)
 	      dest[i]=digits[digit];
 	    else
 	      dest[i]=' ';
@@ -1444,7 +1444,7 @@ static char *fromto(char *str,int from,int to) /* gives back portion of string *
 {
   int len,i;
   char *part;
-  
+
   len=strlen(str);
   if (from>to || to<0 || from>len-1) {
     /* give back empty string */
@@ -1466,14 +1466,14 @@ static char *fromto(char *str,int from,int to) /* gives back portion of string *
 void mywait() /* wait given number of seconds */
 {
   double delay;
-  
+
 #ifdef UNIX
   struct timeval tv;
-#else	
+#else
   MSG msg;
   int timerid;
 #endif
-  
+
   delay=pop(stNUMBER)->value;
   if (delay<0) delay=0.;
 #ifdef UNIX
@@ -1491,7 +1491,7 @@ void mywait() /* wait given number of seconds */
 void mybell() /* ring ascii bell */
 {
 #ifdef UNIX
-#ifdef BEOS	
+#ifdef BEOS
   yi_beep();
 #else
   printf("\007");
@@ -1507,7 +1507,7 @@ void mybell() /* ring ascii bell */
 void create_poke(char flag) /* create Command 'cPOKE' */
 {
   struct command *cmd;
-		
+
   if (flag=='S' || flag=='D')
     cmd=add_command(cPOKEFILE,FALSE);
   else
@@ -1521,12 +1521,12 @@ void poke(struct command *cmd) /* poke into internals */
   char *dest,*s,c;
   char *sarg=NULL;
   double darg;
-		
+
   if (cmd->tag=='s')
     sarg=pop(stSTRING)->pointer;
-  else 
+  else
     darg=pop(stNUMBER)->value;
-		
+
   dest=pop(stSTRING)->pointer;
   for(s=dest;*s;s++) *s=tolower((int)*s);
   /*
@@ -1542,7 +1542,7 @@ void poke(struct command *cmd) /* poke into internals */
   if (!strcmp(dest,"dump") && sarg && !strcmp(sarg,"symbols")) {
     dump_sym();
   }
-  else if (!strcmp(dest,"dump") && sarg && 
+  else if (!strcmp(dest,"dump") && sarg &&
 	   (!strcmp(sarg,"sub") || !strcmp(sarg,"subs") || !strcmp(sarg,"subroutine") || !strcmp(sarg,"subroutines"))) {
     dump_sub(0);
   }
@@ -1612,20 +1612,20 @@ void pokefile(struct command *cmd) /* poke into file */
   char *sarg=NULL;
   double darg;
   int stream;
-		
+
   if (cmd->tag=='S')
     sarg=pop(stSTRING)->pointer;
-  else 
+  else
     darg=pop(stNUMBER)->value;
   stream=(int)(pop(stNUMBER)->value);
-  
+
   if (badstream(stream,0)) return;
-  
+
   if (!(stream_modes[stream] & smWRITE)) {
     sprintf(string,"Stream %d not open for writing",stream);
     error(ERROR,string);
     return;
-  } 
+  }
   if (sarg) {
     fputs(sarg,streams[stream]);
   } else {
@@ -1641,7 +1641,7 @@ void pokefile(struct command *cmd) /* poke into file */
 static double peek(char *dest, YabInterface *yab) /* peek into internals */
 {
   char *s;
-		
+
   for(s=dest;*s;s++) *s=tolower((int)*s);
   /*if (!strcmp(dest,"winwidth")) return winwidth;
   else if (!strcmp(dest,"winheight")) return winheight;
@@ -1664,12 +1664,12 @@ static double peek(char *dest, YabInterface *yab) /* peek into internals */
   else if (!strcmp(dest,"version")) return strtod(VERSION,NULL);
   else if (!strcmp(dest,"error")) return errorcode;
   else if (!strcmp(dest,"read_controls")) return read_controls;
-  else if (!strcmp(dest,"isbound")) return is_bound; 
+  else if (!strcmp(dest,"isbound")) return is_bound;
   else if (dest[0]=='#') {
     error(ERROR,"don't use quotes when peeking into a file");
     return 0;
   }
- 
+
   sprintf(stderr, "PEEK is set to %s\n", dest);
   error(ERROR,"invalid peek");
   return 0;
@@ -1683,7 +1683,7 @@ static int peekfile(int stream) /* read a byte from stream */
     sprintf(string,"stream %d not open for reading",stream);
     error(ERROR,string);
     return 0;
-  } 
+  }
   return fgetc(stream?streams[stream]:stdin);
 }
 
@@ -1691,7 +1691,7 @@ static int peekfile(int stream) /* read a byte from stream */
 static char *peek2(char *dest,struct command *curr) /* peek into internals */
 {
   char *s;
-		
+
   for(s=dest;*s;s++) *s=tolower((int)*s);
   if (!strcmp(dest,"infolevel")) {
     if (infolevel==DEBUG) return my_strdup("debug");
@@ -1709,8 +1709,10 @@ static char *peek2(char *dest,struct command *curr) /* peek into internals */
   else if (!strcmp(dest,"os")) {
 #ifdef HAIKU
     return my_strdup("Haiku");
+#elif defined(UNIX)
+	return my_strdup("Unix");
 #else
-    return my_strdup("BeOS");
+    return my_strdup("Windows");
 #endif
   }
   else if (!strcmp(dest,"directory")) return my_strdup(appdirectory);
@@ -1737,7 +1739,7 @@ static char *peek2(char *dest,struct command *curr) /* peek into internals */
 static char *peek3(char *dest,char *cont) /* peek into internals */
 {
   char *s;
-		
+
   for(s=dest;*s;s++) *s=tolower((int)*s);
   if (!strcmp(dest,"env") || !strcmp(dest,"environment")) {
     return my_strdup(getenv(cont));
@@ -1750,8 +1752,8 @@ static char *peek3(char *dest,char *cont) /* peek into internals */
 
 void create_exception(int flag) /* create command 'exception' */
 {
-  struct command *cmd;  
-  
+  struct command *cmd;
+
   cmd=add_command(cEXCEPTION,FALSE);
   cmd->args=flag;
 }
@@ -1796,7 +1798,7 @@ void exception(struct command *cmd) /* change handling of exceptions */
 void create_restore(char *label) /* create command 'restore' */
 {
   struct command *c;
-  
+
   c=add_command(cRESTORE,FALSE);
   c->pointer=my_strdup(label);
 }
@@ -1806,7 +1808,7 @@ void restore(struct command *cmd) /* reset data pointer to given label */
 {
   struct command *label;
   struct command **datapointer;
-  
+
   datapointer=&(cmd->lib->datapointer);
   if (cmd->type==cRESTORE) { /* first time; got to search the label */
     if (*((char *)cmd->pointer)=='\0') {
@@ -1839,7 +1841,7 @@ void restore(struct command *cmd) /* reset data pointer to given label */
 void create_dbldata(double value)  /* create command dbldata */
 {
   struct command *c;
-  
+
   c=add_command(cDATA,FALSE);
   c->pointer=my_malloc(sizeof(double));
   if (lastdata) lastdata->nextassoc=c;
@@ -1852,7 +1854,7 @@ void create_dbldata(double value)  /* create command dbldata */
 void create_strdata(char *value)  /* create command strdata */
 {
   struct command *c;
-  
+
   c=add_command(cDATA,FALSE);
   if (lastdata) lastdata->nextassoc=c;
   lastdata=c;
@@ -1864,7 +1866,7 @@ void create_strdata(char *value)  /* create command strdata */
 void create_readdata(char type) /* create command readdata */
 {
   struct command *cmd;
-  
+
   cmd=add_command(cREADDATA,FALSE);
   cmd->tag=type;
 }
@@ -1875,7 +1877,7 @@ void readdata(struct command *cmd) /* read data items */
   struct stackentry *read;
   char type;
   struct command **datapointer;
-  
+
   datapointer=&(cmd->lib->datapointer);
   type=cmd->tag;
   while(*datapointer && ((*datapointer)->type!=cDATA || cmd->lib!=(*datapointer)->lib)) {
@@ -1901,10 +1903,10 @@ void readdata(struct command *cmd) /* read data items */
 }
 
 
-void create_dblrelop(char c) /* create command dblrelop */ 
+void create_dblrelop(char c) /* create command dblrelop */
 {
   int type;
-  
+
   switch(c) {
   case '=': type=cEQ;break;
   case '!': type=cNE;break;
@@ -1921,7 +1923,7 @@ void dblrelop(struct command *type)  /* compare topmost double-values */
 {
   double a,b,c;
   struct stackentry *result;
-  
+
   b=pop(stNUMBER)->value;
   a=pop(stNUMBER)->value;
   switch(current->type) {
@@ -1935,13 +1937,13 @@ void dblrelop(struct command *type)  /* compare topmost double-values */
   result=push();
   result->value=c;
   result->type=stNUMBER;
-}    
+}
 
 
-void create_strrelop(char c) /* create command strrelop */ 
+void create_strrelop(char c) /* create command strrelop */
 {
   int type;
-  
+
   switch(c) {
   case '=': type=cSTREQ;break;
   case '!': type=cSTRNE;break;
@@ -1959,7 +1961,7 @@ void strrelop(struct command *type)  /* compare topmost string-values */
   char *a,*b;
   double c;
   struct stackentry *result;
-  
+
   b=pop(stSTRING)->pointer;
   a=pop(stSTRING)->pointer;
   switch(current->type) {
@@ -1973,7 +1975,7 @@ void strrelop(struct command *type)  /* compare topmost string-values */
   result=push();
   result->value=c;
   result->type=stNUMBER;
-}    
+}
 
 void switch_compare(void) /* compare topmost values for switch statement */
 {
@@ -1983,9 +1985,9 @@ void switch_compare(void) /* compare topmost values for switch statement */
   first=pop(stANY);
   second=stackhead->prev;
   if ((second->type==stSWITCH_STRING || second->type==stSTRING) && first->type==stSTRING) {
-    if (second->type==stSWITCH_STRING) 
+    if (second->type==stSWITCH_STRING)
       r=1.;
-    else 
+    else
       r=(strcmp(first->pointer,second->pointer)==0)?1.:0.;
   } else if ((second->type==stSWITCH_NUMBER || second->type==stNUMBER) && first->type==stNUMBER) {
     if (second->type==stSWITCH_NUMBER)
@@ -2018,10 +2020,10 @@ void logical_shortcut(struct command *type)  /* shortcut and/or if possible */
 }
 
 
-void create_boole(char c) /* create command boole */ 
+void create_boole(char c) /* create command boole */
 {
   int type;
-  
+
   switch(c) {
   case '|': type=cOR;break;
   case '&': type=cAND;break;
@@ -2035,9 +2037,9 @@ void boole(struct command *type)  /* perform and/or/not */
 {
   int a,b,c;
   struct stackentry *result;
-  
+
   a=(int)pop(stNUMBER)->value;
-  if (current->type==cNOT) 
+  if (current->type==cNOT)
     c=!a;
   else {
     b=(int)pop(stNUMBER)->value;

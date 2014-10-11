@@ -1,14 +1,14 @@
-/*  
+/*
 
 YABASIC ---  a simple Basic Interpreter
 written by Marc-Oliver Ihm 1995-2004
 homepage: www.yabasic.de
-    
+
 main.c --- main() and auxilliary functions
-    
-This file is part of yabasic and may be copied only 
-under the terms of either the Artistic License or 
-the GNU General Public License (GPL), both of which 
+
+This file is part of yabasic and may be copied only
+under the terms of either the Artistic License or
+the GNU General Public License (GPL), both of which
 can be found at www.yabasic.de
 
 */
@@ -53,7 +53,7 @@ static void chop_command(char *,int *,char ***); /* chops WIN95-commandline */
 #endif
 void create_docu_array(void); /* create array with documentation */
 int equal(char *,char *,int); /* helper for processing options */
-void do_help(char *); /* process help option */ 
+void do_help(char *); /* process help option */
 static int mybind(char *); /* bind a program to the interpreter and save it */
 char *find_interpreter(char *); /* find interpreter with full path */
 
@@ -126,18 +126,18 @@ int mmain(int argc,char **argv, YabInterface* y)
   errorstring=(char *)my_malloc(sizeof(char)*INBUFFLEN);
   *errorstring='\0';
   errorcode=0;
-  
+
   program_state=HATCHED;
   infolevel=WARNING; /* set the initial Infolevel */
-  
+
 #ifdef WINDOWS
   /* get handle for current thread */
   DuplicateHandle(GetCurrentProcess(),GetCurrentThread(),
 		  GetCurrentProcess(),&mainthread,THREAD_ALL_ACCESS,FALSE,0);
-  
+
   /* get handle of instance */
   this_instance=GetModuleHandle(NULL);
-  
+
   /* define my window class */
   myclass.style=0;
   myclass.lpfnWndProc=(LPVOID)mywindowproc;
@@ -149,19 +149,19 @@ int mmain(int argc,char **argv, YabInterface* y)
   myclass.hbrBackground=(HBRUSH)COLOR_WINDOW; /* default-background */
   myclass.lpszMenuName=NULL;
   myclass.lpszClassName=my_class;
-  
+
   RegisterClass(&myclass);
-  
+
   /* get console handles */
   ConsoleInput=GetStdHandle(STD_INPUT_HANDLE);
   ConsoleOutput=GetStdHandle(STD_OUTPUT_HANDLE);
   GetConsoleMode(ConsoleInput,&InitialConsole);
-  
+
   /* find out, if launched from commandline */
   GetConsoleScreenBufferInfo(ConsoleOutput,&csbi);
   Commandline=!((csbi.dwCursorPosition.X==0) && (csbi.dwCursorPosition.Y==0));
   if ((csbi.dwSize.X<=0) || (csbi.dwSize.Y <= 0)) Commandline=TRUE;
-  
+
 #endif
   /* get library path */
   library_path[0]='\0';
@@ -181,14 +181,14 @@ int mmain(int argc,char **argv, YabInterface* y)
     fromlibpath=FALSE;
   }
 #endif
-  
+
   /* find out, if this executable is bound to a yabasic program */
   interpreter_path=find_interpreter(argv[0]);
   is_bound=isbound();
 
   /* parse arguments */
   parse_arguments(argc,argv);
-  
+
   /* brush up library path */
   if (!library_path[0]) strcpy(library_path,library_default);
   len=strlen(library_path);
@@ -200,14 +200,14 @@ int mmain(int argc,char **argv, YabInterface* y)
     if (!fromlibpath) strcat(library_path,"lib\\");
   }
 #endif
-    
+
   time(&compilation_start);
   error(DEBUG,"this is yab " VERSION);
   initialize();
   program_state=INITIALIZED;
 
   error(NOTE,"calling parser/compiler");
-      
+
   if (interactive) {
     printf("%s",BANNER);
     printf("Enter your program and type RETURN twice when done.\n\n");
@@ -231,7 +231,7 @@ int mmain(int argc,char **argv, YabInterface* y)
   add_command(cEND,NULL);
   sprintf(string,"read %d line(s) and generated %d command(s)",mylineno,commandcount);
   error(NOTE,string);
-  
+
   time(&compilation_end);
 
   if (to_bind) {
@@ -246,18 +246,18 @@ int mmain(int argc,char **argv, YabInterface* y)
       end_it();
     }
   }
-  
+
   if (errorlevel>ERROR && !check_compat) {
     program_state=RUNNING;
     run_it(yab);
   } else {
     program_state=FINISHED;
-    if (check_compat) 
+    if (check_compat)
       printf("Check for possible compatibility problems done\nProgram will not be executed, %d possible problem(s) reported\n",warning_count);
     else
       error(ERROR,"Program not executed");
   }
-  
+
   program_state=FINISHED;
   sprintf(string,"%d debug(s), %d note(s), %d warning(s), %d error(s)",
 	  debug_count,note_count,warning_count,error_count);
@@ -280,14 +280,14 @@ static void std_diag(char *head,int type,char *name) /* produce standard diagnos
   int n,i;
   char *s;
   struct stackentry *sp;
-  
+
   if (infolevel>=DEBUG) {
     s=string;
     if (type>cLAST_COMMAND || type<cFIRST_COMMAND) {
       sprintf(s,"%s Illegal %d %n",head,type,&n);
     }
     else {
-      if (name) 
+      if (name)
 	sprintf(s,"%s '%s' (%s) %n",head,explanation[type],name?name:"NULL",&n);
       else
 	sprintf(s,"%s '%s' %n",head,explanation[type],&n);
@@ -311,7 +311,7 @@ static void std_diag(char *head,int type,char *name) /* produce standard diagnos
           break;
         case stSTRINGARRAYREF:
         case stNUMBERARRAYREF:
-	  if (sp->pointer) 
+	  if (sp->pointer)
 	    sprintf(s,"%s()%n",(char *)sp->pointer,&n);
 	  else
 	    sprintf(s,"ARRAY()%n",&n);
@@ -363,22 +363,22 @@ static void std_diag(char *head,int type,char *name) /* produce standard diagnos
 }
 
 
-struct command *add_command(int type,char *name) 
+struct command *add_command(int type,char *name)
      /* get room for new command, and make a link from old one */
 {
   struct command *new;
-  
+
   if (infolevel>=DEBUG) std_diag("creating",type,name);
   cmdhead->type=type;  /* store command */
   cmdhead->line=mylineno;
   cmdhead->lib=currlib;
   cmdhead->cnt=commandcount;
-  if (!name || !*name) 
+  if (!name || !*name)
     cmdhead->name=NULL;
   else
     cmdhead->name=my_strdup(name);
   commandcount++;
-  cmdhead->pointer=NULL;  /* no data yet */ 
+  cmdhead->pointer=NULL;  /* no data yet */
   cmdhead->jump=NULL;
   cmdhead->nextassoc=NULL;
   cmdhead->switch_id=get_switch_id();
@@ -391,7 +391,7 @@ struct command *add_command(int type,char *name)
   }
 
   /* create new command */
-  new=(struct command *)my_malloc(sizeof(struct command)); 
+  new=(struct command *)my_malloc(sizeof(struct command));
   /* and initialize */
   new->next=NULL;
   new->prev=cmdhead;
@@ -422,7 +422,7 @@ static void parse_arguments(int cargc,char *cargv[])
   char *option;
   char *info;
   int options_done=FALSE;
-  
+
   if (cargc>1) larg=strlen(cargv[1]);
   else larg=0;
 #ifdef UNIX
@@ -455,16 +455,16 @@ static void parse_arguments(int cargc,char *cargv[])
 #endif
   yabargv=(char **)my_malloc((larg+cargc+1)*sizeof(char *));
   yabargc=0;
-  
+
   if (is_bound) options_done=1;
   /* process options */
   for(ar=1;ar<argc;ar++) {
     option=argv[ar];
     if (!options_done) {
-      if (equal("-help",option,-2) || 
-	  equal("-?",option,2) || 
+      if (equal("-help",option,-2) ||
+	  equal("-?",option,2) ||
 	  equal("-version",option,2) ||
-	  equal("-licence",option,4) || 
+	  equal("-licence",option,4) ||
 	  equal("-license",option,4)) {
 	do_help(option);
 	end_it();
@@ -494,7 +494,7 @@ static void parse_arguments(int cargc,char *cargv[])
 	  end_it();
 	}
       }
-      /*else if (equal("-fg",option,3) || equal("-foreground",option,4)) {   
+      /*else if (equal("-fg",option,3) || equal("-foreground",option,4)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no foreground colour specified " YABFORHELP);
@@ -502,21 +502,21 @@ static void parse_arguments(int cargc,char *cargv[])
 	}
 	foreground=my_strdup(argv[ar]);
       }
-      else if (equal("-bg",option,2) || equal("-background",option,2)) {           
+      else if (equal("-bg",option,2) || equal("-background",option,2)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no background colour specified (-h for help)");
 	  end_it();
 	}
-	background=my_strdup(argv[ar]);   
+	background=my_strdup(argv[ar]);
       }
-      else if (equal("-geometry",option,2)) {             
+      else if (equal("-geometry",option,2)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no geometry string specified (-h for help)");
 	  end_it();
 	}
-	geometry=my_strdup(argv[ar]);     
+	geometry=my_strdup(argv[ar]);
       }*/
       else if (equal("-bind",option,3)) {
 	ar++;
@@ -526,15 +526,15 @@ static void parse_arguments(int cargc,char *cargv[])
 	}
 	to_bind=my_strdup(argv[ar]);
       }
-      else if (equal("-execute",option,2)) {             
+      else if (equal("-execute",option,2)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no commands specified (-h for help)");
 	  end_it();
 	}
-	explicit=my_strdup(argv[ar]);     
+	explicit=my_strdup(argv[ar]);
       }
-      else if (equal("-librarypath",option,4)) {             
+      else if (equal("-librarypath",option,4)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no library path specified (-h for help)");
@@ -542,7 +542,7 @@ static void parse_arguments(int cargc,char *cargv[])
 	}
 	strcpy(library_path,argv[ar]);
       }/*
-      else if (equal("-display",option,3)) {              
+      else if (equal("-display",option,3)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no display name specified (-h for help)");
@@ -550,7 +550,7 @@ static void parse_arguments(int cargc,char *cargv[])
 	}
 	displayname=my_strdup(argv[ar]);
       }
-      else if (equal("-font",option,4)) {         
+      else if (equal("-font",option,4)) {
 	ar++;
 	if (ar>=argc) {
 	  error(ERROR,"no font specified (-h for help)");
@@ -559,7 +559,7 @@ static void parse_arguments(int cargc,char *cargv[])
 	font=my_strdup(argv[ar]);
       }*/ else if (!print_docu &&
 		 (!strcmp("-doc",option) || !strncmp("-doc_",option,5) ||
-		  !strcmp("-docu",option) || !strncmp("-docu_",option,6))) {   
+		  !strcmp("-docu",option) || !strncmp("-docu_",option,6))) {
 	print_docu=TRUE;
 	if (!strncmp("-doc_",option,5)) {
 	  ar--;
@@ -593,9 +593,9 @@ static void parse_arguments(int cargc,char *cargv[])
 	} else {
 	  progname=strrchr(main_file_name,'\\');
 	  if (!progname) progname=strrchr(main_file_name,'/');
-	  if (progname) 
+	  if (progname)
 	    progname++;
-	  else 
+	  else
 	    progname=main_file_name;
 	  if (!progname) progname="yab";
 	}
@@ -608,9 +608,9 @@ static void parse_arguments(int cargc,char *cargv[])
       yabargc++;
     }
   }
-  
+
   interactive=FALSE;
-  
+
 #ifdef WINDOWS
   if (is_bound || !progname) {
     SetConsoleTitle("");
@@ -618,7 +618,7 @@ static void parse_arguments(int cargc,char *cargv[])
     SetConsoleTitle(progname);
   }
 #endif
-  
+
   if (is_bound) {
     inputfile=bound_program;
     main_file_name=my_strdup(interpreter_path);
@@ -637,7 +637,7 @@ static void parse_arguments(int cargc,char *cargv[])
 
 }
 
-void do_help(char *op) /* process help option */ 
+void do_help(char *op) /* process help option */
 {
   char *ooop=op;
   char *oop=op;
@@ -662,7 +662,7 @@ void do_help(char *op) /* process help option */
 #endif
 #else
       fprintf(stderr,"See the file yabasic.htm (accessible from the start-menu) for a\ndescription");
-#endif    
+#endif
 //      fprintf(stderr,"of the language, or go to www.yabasic.de for the latest\n");
 //      fprintf(stderr,"information and other yabasic resources.\n\n");
     }
@@ -727,7 +727,7 @@ static void chop_command(char *command,int *argc,char ***argv)
   char c,last;
   char *curr;
   char **list;
-  
+
   /* count, how many arguments */
   count=i=0;
   last=' ';
@@ -738,13 +738,13 @@ static void chop_command(char *command,int *argc,char ***argv)
     last=c;
     i++;
   }
-  
+
   /* fill yabasic into argv[0] */
   *argv=my_malloc((count+1)*sizeof(char *));
   list=*argv;
   *argc=count+1;
   *list=my_strdup("yabasic");
-  
+
   /* fill in other strings */
   i=0;
   count=1;
@@ -778,7 +778,7 @@ static void end_it(void) /* perform shutdown-operations */
 #ifdef UNIX
   int status;
 #ifndef BEOS
-  if (winpid==0 || termpid==0 || backpid==0) 
+  if (winpid==0 || termpid==0 || backpid==0)
   	yi_exit(1,yab);
   if (backpid>0) {
     kill(backpid,SIGTERM);
@@ -827,7 +827,7 @@ static void end_it(void) /* perform shutdown-operations */
 }
 
 
-static void initialize(void) 
+static void initialize(void)
      /* give correct values to pointers etc ... */
 {
   struct symbol *s;
@@ -847,59 +847,55 @@ static void initialize(void)
 #ifdef SIGABRT
   signal(SIGABRT,signal_handler);
 #endif */
-  
+
   /* initialize error handling: no errors seen 'til now */
-  errorlevel=DEBUG;  
+  errorlevel=DEBUG;
   debug_count=0;
   note_count=0;
   warning_count=0;
   error_count=0;
-  
+
   /* initialize stack of symbol lists */
   pushsymlist();
 
   /* initialize random number generator */
   srand((unsigned)time(NULL));
-  
+
   /* initialize numeric stack */
   /* create first : */
-  stackroot=(struct stackentry *)my_malloc(sizeof(struct stackentry)); 
+  stackroot=(struct stackentry *)my_malloc(sizeof(struct stackentry));
   stackroot->next=NULL;
   stackroot->prev=NULL;
   stackhead=stackroot; /* stack of double values */
-  
+
   /* initialize command stack */
   /* create first: */
-  cmdroot=(struct command *)my_malloc(sizeof(struct command)); 
+  cmdroot=(struct command *)my_malloc(sizeof(struct command));
   cmdroot->next=cmdroot->prev=NULL;
-  
+
   /* initialize random number generator */
   srand((unsigned int)time(NULL));
-  
+
   /* specify default text-alignement and window origin */
   /*
   text_align=my_strdup("lb");
   winorigin=my_strdup("lt");*/
-  
+
   /* initialize stack */
   base=push();
   base->type=stROOT; /* push nil, so that pop will not crash */
   cmdhead=cmdroot; /* list of commands */;
   commandcount=0;
-  
+
   /* add internal string variables */
   s=get_sym("yabos$",sySTRING,amADD_GLOBAL);
   if (s->pointer) my_free(s->pointer);
-#ifdef UNIX
-#ifndef BEOS
-  s->pointer=my_strdup("unix");
-#elseifdef HAIKU
-  s->pointer=my_strdup("Haiku");
+#ifdef HAIKU
+    s->pointer=my_strdup("Haiku");
+#elif defined(UNIX)
+	s->pointer=my_strdup("Unix");
 #else
-  s->pointer=my_strdup("BeOS");
-#endif
-#else
-  s->pointer=my_strdup("windows");
+    s->pointer=my_strdup("Windows");
 #endif
 
   /* set default-scales for grafics */
@@ -911,7 +907,7 @@ static void initialize(void)
   calc_psscale();
 #endif*/
 
-    
+
   /* file stuff */
   for(i=1;i<=9;i++) {
     streams[i]=NULL;
@@ -922,7 +918,7 @@ static void initialize(void)
 #ifdef UNIX
   /* printerfile=NULL; /* no ps-file yet */
 #endif
-  
+
   /* array with explanation */
   for(i=cFIRST_COMMAND;i<=cLAST_COMMAND;i++) explanation[i]="???";
   explanation[cFIRST_COMMAND]="FIRST_COMMAND";
@@ -1057,7 +1053,7 @@ static void initialize(void)
   explanation[cBREAK_MARK]="BREAK_MARK";
   explanation[cCONTINUE_CORRECTION]="CONTINUE_CORRECTION";
   explanation[cLAST_COMMAND]="???";
-  
+
   ykey[kERR]="error";
   ykey[kUP]="up";
   ykey[kDOWN]="down";
@@ -1117,7 +1113,7 @@ void signal_handler(int sig)   /* handle signals */
     if (kthandle!=INVALID_HANDLE_VALUE) TerminateThread(kthandle,0);
   }
 #endif
-  
+
   switch(sig) {
   case SIGFPE:
     error(FATAL,"floating point exception, cannot proceed.");
@@ -1157,7 +1153,7 @@ static void run_it(YabInterface* yab)
   if (print_docu) { /* don't execute program, just print docu */
     while(current!=cmdhead) {
       if (current->type==cDOCU) {
-	if (infolevel>=DEBUG) std_diag("executing",current->type,current->name); 
+	if (infolevel>=DEBUG) std_diag("executing",current->type,current->name);
 	printf("%s\n",(char *)current->pointer);
         l++;
         if (hold_docu && !(l%24)) {
@@ -1165,7 +1161,7 @@ static void run_it(YabInterface* yab)
 	  fgets(string,20,stdin);
         }
       } else {
-	if (infolevel>=DEBUG) std_diag("skipping",current->type,current->name); 
+	if (infolevel>=DEBUG) std_diag("skipping",current->type,current->name);
       }
       current=current->next;
     }
@@ -1176,13 +1172,13 @@ static void run_it(YabInterface* yab)
     }
   } else {
     while(current!=cmdhead && endreason==erNONE) {
-      if (infolevel>=DEBUG) std_diag("executing",current->type,current->name); 
+      if (infolevel>=DEBUG) std_diag("executing",current->type,current->name);
       switch(current->type) {
       case cGOTO:case cQGOTO:case cGOSUB:case cQGOSUB:case cCALL:case cQCALL:
 	jump(current); DONE;
       case cEXCEPTION:
 	exception(current); DONE;
-      case cSKIPPER: 
+      case cSKIPPER:
 	skipper(); break;
       case cSKIPONCE:
 	skiponce(current); DONE;
@@ -1190,7 +1186,7 @@ static void run_it(YabInterface* yab)
 	resetskiponce(current); DONE;
       case cNEXT_CASE:
 	next_case(); DONE;
-      case cBREAK:case cMINOR_BREAK: 
+      case cBREAK:case cMINOR_BREAK:
 	mybreak(current); DONE;
       case cSWITCH_COMPARE:
 	switch_compare(); DONE;
@@ -1206,7 +1202,7 @@ static void run_it(YabInterface* yab)
 	function_or_array(current);
 	break; /* NOT 'DONE' ! */
       case cLABEL:case cDATA:case cNOP:case cUSER_FUNCTION:
-      case cSUBLINK:case cEND_FUNCTION: case cDOCU: case cBREAK_HERE: 
+      case cSUBLINK:case cEND_FUNCTION: case cDOCU: case cBREAK_HERE:
       case cCONTINUE_HERE:case cBREAK_MARK:case cCONTINUE_CORRECTION:
 	DONE;
       case cERROR:
@@ -1219,7 +1215,7 @@ static void run_it(YabInterface* yab)
 	myreturn(current); DONE;
       case cRETVAL:
 	retval(current); DONE;
-      case cPUSHDBLSYM: 
+      case cPUSHDBLSYM:
 	pushdblsym(current); DONE;
       case cPUSHDBL:
 	pushdbl(current); DONE;
@@ -1229,7 +1225,7 @@ static void run_it(YabInterface* yab)
 	pop(stANY); DONE;
       case cPOPSTRSYM:
 	popstrsym(current); DONE;
-      case cPUSHSTRSYM: 
+      case cPUSHSTRSYM:
 	pushstrsym(current); DONE;
       case cPUSHSTR:
 	pushstr(current); DONE;
@@ -1253,7 +1249,7 @@ static void run_it(YabInterface* yab)
 	pusharrayref(current); DONE;
       case cTOKEN: case cTOKEN2: case cSPLIT: case cSPLIT2:
 	token(current); DONE;
-      case cTOKENALT: case cTOKENALT2: case cSPLITALT: case cSPLITALT2: 
+      case cTOKENALT: case cTOKENALT2: case cSPLITALT: case cSPLITALT2:
 	tokenalt(current); DONE;
       case cARDIM: case cARSIZE:
 	query_array(current); DONE;
@@ -1657,7 +1653,7 @@ static void run_it(YabInterface* yab)
   }
   program_state=FINISHED;
   switch(errorlevel) {
-  case NOTE:case DEBUG: 
+  case NOTE:case DEBUG:
     error(NOTE,"Program ended normally."); break;
   case WARNING:
     error(WARNING,"Program ended with a warning"); break;
@@ -1670,19 +1666,19 @@ static void run_it(YabInterface* yab)
 }
 
 
-void error(int severity, char *messageline) 
+void error(int severity, char *messageline)
      /* reports an basic error to the user and possibly exits */
 {
   if (program_state==COMPILING)
     error_with_line(severity,messageline,mylineno);
-  else if (program_state==RUNNING && current->line>0) 
+  else if (program_state==RUNNING && current->line>0)
     error_with_line(severity,messageline,current->line);
-  else 
+  else
     error_with_line(severity,messageline,-1);
 }
 
 
-void error_with_line(int severity, char *message,int line) 
+void error_with_line(int severity, char *message,int line)
      /* reports an basic error to the user and possibly exits */
 {
   char *callstack;
@@ -1698,32 +1694,32 @@ void error_with_line(int severity, char *message,int line)
     if (curinized) reset_shell_mode();
 #endif
 #endif
-    
+
     switch(severity) {
-    case(INFO): 
-      stext="---Info"; 
+    case(INFO):
+      stext="---Info";
       break;
-    case(DUMP): 
-      stext="---Dump"; 
+    case(DUMP):
+      stext="---Dump";
       break;
-    case(DEBUG): 
-      stext="---Debug"; 
+    case(DEBUG):
+      stext="---Debug";
       debug_count++;
       break;
-    case(NOTE): 
-      stext="---Note"; 
+    case(NOTE):
+      stext="---Note";
       note_count++;
       break;
-    case(WARNING): 
-      stext="---Warning"; 
+    case(WARNING):
+      stext="---Warning";
       warning_count++;
       break;
-    case(ERROR): 
-      stext="---Error"; 
+    case(ERROR):
+      stext="---Error";
       error_count++;
       break;
-    case(FATAL): 
-      stext="---Fatal"; 
+    case(FATAL):
+      stext="---Fatal";
       break;
     }
     fprintf(stderr,"%s",stext);
@@ -1768,12 +1764,12 @@ void error_with_line(int severity, char *message,int line)
 char *my_strndup(char *arg,int len) /*  own version of strndup */
 {
   char *copy;
-  
+
   copy=my_malloc(len+1);
-  
+
   strncpy(copy,arg,len);
   copy[len]='\0';
-  
+
   return copy;
 }
 
@@ -1781,7 +1777,7 @@ char *my_strndup(char *arg,int len) /*  own version of strndup */
 char *my_strdup(char *arg)  /* my own version of strdup, checks for failure */
 {
   int l;
-  
+
   if (!arg) return my_strndup("",0);
   l=strlen(arg);
   return my_strndup(arg,l);
@@ -1791,7 +1787,7 @@ char *my_strdup(char *arg)  /* my own version of strdup, checks for failure */
 void *my_malloc(unsigned num) /* Alloc memory and issue warning on failure */
 {
   void *room;
-  
+
   room=malloc(num+sizeof(int));
   if (room==NULL) {
     sprintf(string,"Can't malloc %d bytes of memory",num);
@@ -1806,18 +1802,18 @@ void my_free(void *mem) /* free memory */
   free(mem);
 }
 
-      
+
 struct libfile_name *new_file(char *l,char *s) /* create a new structure for library names */
 {
   struct libfile_name *new;
   struct libfile_name *curr;
   static struct libfile_name *last=NULL;
   int start,end;
-  
+
   /* check, if library has already been included */
   for(curr=libfile_stack[0];curr;curr=curr->next) {
     if (!strcmp(curr->l,l)) {
-      if (is_bound) 
+      if (is_bound)
 	return curr;
       else
 	return NULL;
@@ -1829,13 +1825,13 @@ struct libfile_name *new_file(char *l,char *s) /* create a new structure for lib
   new->lineno=1;
   if (last) last->next=new;
   last=new;
-  
+
   new->l=my_strdup(l);
   new->llen=strlen(new->l);
 
   if (s) {
     new->s=my_strdup(s);
-  } else { 
+  } else {
     /* no short name supplied get piece from l */
     end=strlen(l);
     for(start=end;start>0;start--) {
@@ -1876,7 +1872,7 @@ char *strip(char *name) /* strip down to minimal name */
 {
   static char buff[300];
   char *at,*dot;
-  
+
   if (infolevel>=DEBUG) return name;
   dot=strchr(name,'.');
   if (dot)
@@ -1885,7 +1881,7 @@ char *strip(char *name) /* strip down to minimal name */
     strcpy(buff,name);
   at=strchr(buff,'@');
   if (at) *at='\0';
-    
+
   return buff;
 }
 
@@ -1894,7 +1890,7 @@ void do_error(struct command *cmd) /* issue user defined error */
 {
   struct stackentry *s;
   struct command *r;
-  
+
   s=stackhead;
   while(s!=stackroot) {
     if (s->type==stRETADDCALL) {
@@ -1920,7 +1916,7 @@ void compile() /* create s subroutine at runtime */
 void create_execute(int string) /* create command 'cEXECUTESUB' */
 {
   struct command *cmd;
-  
+
   cmd=add_command(string?cEXECUTE2:cEXECUTE,NULL);
   cmd->pointer=my_strdup(dotify("",FALSE));
 }
@@ -1931,7 +1927,7 @@ void execute(struct command *cmd) /* execute a subroutine */
   struct stackentry *st,*ret;
   char *fullname,*shortname;
   struct command *newcurr;
-  
+
   st=stackhead;
   do {st=st->prev;} while(st->type!=stFREE);
   st=st->next;
@@ -1941,7 +1937,7 @@ void execute(struct command *cmd) /* execute a subroutine */
   }
   shortname=st->pointer;
   if ((shortname[strlen(shortname)-1]=='$')!=(cmd->type==cEXECUTE2)) {
-    if (cmd->type==cEXECUTE2) 
+    if (cmd->type==cEXECUTE2)
       sprintf(string,"expecting the name of a string function (not '%s')",shortname);
     else
       sprintf(string,"expecting the name of a numeric function (not '%s')",shortname);
@@ -1976,7 +1972,7 @@ void create_docu(char *doc) /* create command 'docu' */
   if (inlib) return;
   cmd=add_command(cDOCU,NULL);
   cmd->pointer=doc;
-  if (previous) 
+  if (previous)
     previous->nextassoc=cmd;
   else
     docuhead=cmd;
@@ -1986,7 +1982,7 @@ void create_docu(char *doc) /* create command 'docu' */
 
 
 void create_docu_array(void) /* create array with documentation */
-{  
+{
   struct array *ar;
   struct command *doc;
   int i;
@@ -2004,7 +2000,7 @@ void create_docu_array(void) /* create array with documentation */
     i++;
   }
   get_sym("main.docu$",syARRAY,amADD_GLOBAL)->pointer=ar;
-} 
+}
 
 
 int isbound(void) /* check if this interpreter is bound to a program */
@@ -2030,7 +2026,7 @@ int isbound(void) /* check if this interpreter is bound to a program */
   int c;
   int proglen=0;
   int bound=1;
-  
+
   if (!interpreter_path || !interpreter_path[0]) {
     error(FATAL,"interpreter_path is not set !");
     return 0;
@@ -2054,7 +2050,7 @@ int isbound(void) /* check if this interpreter is bound to a program */
     fclose(interpreter);
     return bound;
   }
-  
+
   if (fseek(interpreter,0-strlen(YABMAGIC)-5-8-1,SEEK_END)) {
     sprintf(string,"Couldn't seek within '%s': %s",interpreter_path,my_strerror(errno));
     error(WARNING,string);
@@ -2141,7 +2137,7 @@ static int mybind(char *bound) /* bind a program to the interpreter and save it 
     sprintf(string,"binding %s and %s into %s",interpreter_path,main_file_name,bound);
     error(NOTE,string);
   }
-  
+
   while((c=fgetc(fyab))!=EOF) {
     fputc(c,fbound);
   }
@@ -2170,7 +2166,7 @@ static int mybind(char *bound) /* bind a program to the interpreter and save it 
   for (pc="\nimport __END_OF_IMPORT\n";*pc;pc++) {
     fputc(*pc,fbound);
     proglen++;
-  }    
+  }
   while((c=fgetc(fprog))!=EOF) {
     fputc(c,fbound);
     proglen++;
@@ -2181,7 +2177,7 @@ static int mybind(char *bound) /* bind a program to the interpreter and save it 
   fclose(fyab);
   fclose(fprog);
   fclose(fbound);
-  
+
   return 1;
 }
 
@@ -2200,8 +2196,8 @@ char *find_interpreter(char *name) /* find interpreter with full path */
     my_free(path);
     return my_strdup(name);
   }
-  
-#else	
+
+#else
   if (f=fopen(name,"r")) {
     fclose(f);
     path=my_strdup(name);
@@ -2228,7 +2224,7 @@ char *find_interpreter(char *name) /* find interpreter with full path */
 #endif
 }
 
-	
+
 char *my_strerror(int err) { /* return description of error */
 #ifdef WINDOWS
   return strerror(err);

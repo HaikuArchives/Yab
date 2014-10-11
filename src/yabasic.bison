@@ -6,10 +6,10 @@
     homepage: www.yabasic.de
 
     BISON part
-     
-    This file is part of yabasic and may be copied only 
-    under the terms of either the Artistic License or 
-    the GNU General Public License (GPL), both of which 
+
+    This file is part of yabasic and may be copied only
+    under the terms of either the Artistic License or
+    the GNU General Public License (GPL), both of which
     can be found at www.yabasic.de
 
 */
@@ -68,7 +68,7 @@ void report_missing(int severity,char *text) {
     if (string[0]) error(severity,string);
   }
 }
-     
+
 %}
 
 %union {
@@ -98,7 +98,7 @@ void report_missing(int severity,char *text) {
 %token <string> tSTRING
 
 %token tFOR tTO tSTEP tNEXT tWHILE tWEND tREPEAT tUNTIL tIMPORT
-%token tGOTO tGOSUB tLABEL tON tSUB tENDSUB tLOCAL tSTATIC tEXPORT tERROR 
+%token tGOTO tGOSUB tLABEL tON tSUB tENDSUB tLOCAL tSTATIC tEXPORT tERROR
 %token tEXECUTE tEXECUTE2 tCOMPILE tRUNTIME_CREATED_SUB
 %token tINTERRUPT tBREAK tCONTINUE tSWITCH tSEND tCASE tDEFAULT tLOOP tDO tSEP tEOPROG
 %token tIF tTHEN tELSE tELSIF tENDIF tUSING
@@ -107,7 +107,7 @@ void report_missing(int severity,char *text) {
 %token tAND tOR tNOT tEOR
 %token tNEQ tLEQ tGEQ tLTN tGTN tEQU tPOW
 %token tREAD tDATA tRESTORE
-%token tOPEN tCLOSE tSEEK tTELL tAS tREADING tWRITING 
+%token tOPEN tCLOSE tSEEK tTELL tAS tREADING tWRITING
 %token tWAIT tBELL tLET tARDIM tARSIZE tBIND
 %token tWINDOW tDOT tCIRCLE tCLEAR tFILL tPRINTER tSETUP
 %token tBUTTON tALERT tMENU tCHECKBOX tRADIOBUTTON tTEXTCONTROL
@@ -122,11 +122,11 @@ void report_missing(int severity,char *text) {
 %token tSIN tASIN tCOS tACOS tTAN tATAN tEXP tLOG
 %token tSQRT tSQR tMYEOF tABS tSIG
 %token tINT tFRAC tMOD tRAN tLEN tVAL tLEFT tRIGHT tMID tMIN tMAX
-%token tSTR tINKEY tCHR tASC tHEX tDEC tBIN tUPPER tLOWER 
+%token tSTR tINKEY tCHR tASC tHEX tDEC tBIN tUPPER tLOWER
 %token tTRIM tLTRIM tRTRIM tINSTR tRINSTR
-%token tSYSTEM tSYSTEM2 tPEEK tPEEK2 tPOKE 
+%token tSYSTEM tSYSTEM2 tPEEK tPEEK2 tPOKE
 %token tDATE tTIME tTOKEN tTOKENALT tSPLIT tSPLITALT tGLOB
-%token tMESSAGE tIMAGE tSVG tTRANSLATE tGET tMOUSE tISMOUSEIN 
+%token tMESSAGE tIMAGE tSVG tTRANSLATE tGET tMOUSE tISMOUSEIN
 %token tKEYBOARD tPASTE tGETNUM
 
 %left tOR
@@ -149,18 +149,18 @@ program: statement_list tEOPROG {YYACCEPT;}
   ;
 
 statement_list: statement
-  | statement_list {if (errorlevel<=ERROR) {YYABORT;}} 
+  | statement_list {if (errorlevel<=ERROR) {YYABORT;}}
     tSEP {if ($3>=0) mylineno+=$3; else switchlib();} statement
   ;
 
 statement:  /* empty */
-  | string_assignment 
-  | tLET string_assignment 
+  | string_assignment
+  | tLET string_assignment
   | assignment
   | tLET assignment
   | tIMPORT {report_missing(ERROR,"do not import a library in a loop or an if-statement");switchlib();}
   | tERROR string_expression {add_command(cERROR,NULL);}
-  | for_loop 
+  | for_loop
   | switch_number_or_string
   | repeat_loop
   | while_loop
@@ -180,7 +180,7 @@ statement:  /* empty */
   | tON tINTERRUPT tCONTINUE {create_exception(FALSE);}
   | tON expression tGOTO {add_command(cSKIPPER,NULL);}
     goto_list {add_command(cNOP,NULL);}
-  | tON expression tGOSUB {add_command(cSKIPPER,NULL);} 
+  | tON expression tGOSUB {add_command(cSKIPPER,NULL);}
     gosub_list {add_command(cNOP,NULL);}
   | tLABEL symbol_or_lineno {create_label((function_type!=ftNONE)?dotify($2,TRUE):$2,cLABEL);}
   | open_clause {add_command(cCHECKOPEN,NULL);}
@@ -189,7 +189,7 @@ statement:  /* empty */
   | tCOMPILE string_expression {add_command(cCOMPILE,NULL);}
   | tEXECUTE '(' call_list ')' {create_execute(0);add_command(cPOP,NULL);add_command(cPOP,NULL);}
   | tEXECUTE2 '(' call_list ')' {create_execute(1);add_command(cPOP,NULL);add_command(cPOP,NULL);}
-  | tPRINT printintro printlist {create_colour(0);create_print('n');create_pps(cPOPSTREAM,0);} 
+  | tPRINT printintro printlist {create_colour(0);create_print('n');create_pps(cPOPSTREAM,0);}
   | tPRINT printintro printlist ';' {create_colour(0);create_pps(cPOPSTREAM,0);}
   | tPRINT printintro printlist ',' {create_colour(0);create_print('t');create_pps(cPOPSTREAM,0);}
   | tINPUT {tileol=FALSE;} inputbody
@@ -318,10 +318,10 @@ statement:  /* empty */
   | tTREEBOX tREMOVE string_expression ',' string_expression ',' string_expression {add_command(cTREEBOX9,NULL);}
   | tTREEBOX tEXPAND string_expression ',' string_expression {add_command(cTREEBOX10,NULL);}
   | tTREEBOX tCOLLAPSE string_expression ',' string_expression {add_command(cTREEBOX11,NULL);}
-  | tBUTTON tIMAGE coordinates ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' string_expression {add_command(cBUTTONIMAGE,NULL);} 
-  | tCHECKBOX tIMAGE coordinates ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' expression ',' string_expression {add_command(cCHECKBOXIMAGE,NULL);} 
-  | tCHECKBOX tSET string_expression ',' expression {add_command(cCHECKBOXSET,NULL);} 
-  | tRADIOBUTTON tSET string_expression ',' expression {add_command(cRADIOSET,NULL);} 
+  | tBUTTON tIMAGE coordinates ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' string_expression {add_command(cBUTTONIMAGE,NULL);}
+  | tCHECKBOX tIMAGE coordinates ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' string_expression ',' expression ',' string_expression {add_command(cCHECKBOXIMAGE,NULL);}
+  | tCHECKBOX tSET string_expression ',' expression {add_command(cCHECKBOXSET,NULL);}
+  | tRADIOBUTTON tSET string_expression ',' expression {add_command(cRADIOSET,NULL);}
   | tTOOLTIP string_expression ',' string_expression {add_command(cTOOLTIP,NULL);}
   | tTOOLTIP tCOLOUR string_expression ',' expression ',' expression ',' expression  {add_command(cTOOLTIPCOLOR,NULL);}
   | tLISTBOX tSORT string_expression {add_command(cLISTSORT,NULL);}
@@ -419,7 +419,7 @@ seek_clause: tSEEK hashed_number ',' expression {add_command(cSEEK,NULL);}
   ;
 
 string_scalar_or_array: tSTRSYM {add_command(cPUSHSTRPTR,dotify($1,FALSE));}
-  | tSTRSYM '(' call_list ')' {create_doarray(dotify($1,FALSE),GETSTRINGPOINTER);} 
+  | tSTRSYM '(' call_list ')' {create_doarray(dotify($1,FALSE),GETSTRINGPOINTER);}
   ;
 
 string_expression: tSTRSYM {add_command(cPUSHSTRSYM,dotify($1,FALSE));}
@@ -435,8 +435,8 @@ string_function: tLEFT '(' string_expression ',' expression ')' {create_function
   | tMID '(' string_expression ',' expression ',' expression ')' {create_function(fMID);}
   | tMID '(' string_expression ',' expression ')' {create_function(fMID2);}
   | tSTR '(' expression ')' {create_function(fSTR);}
-  | tSTR '(' expression ',' string_expression ')' {create_function(fSTR2);} 
-  | tSTR '(' expression ',' string_expression ',' string_expression ')' {create_function(fSTR3);} 
+  | tSTR '(' expression ',' string_expression ')' {create_function(fSTR2);}
+  | tSTR '(' expression ',' string_expression ',' string_expression ')' {create_function(fSTR3);}
   | tINKEY {create_pushdbl(-1);create_function(fINKEY);}
   | tINKEY '(' ')' {create_pushdbl(-1);create_function(fINKEY);}
   | tINKEY '(' expression ')' {create_function(fINKEY);}
@@ -464,7 +464,7 @@ string_function: tLEFT '(' string_expression ',' expression ')' {create_function
   | tMESSAGE {create_function(fMESSAGE);}
   | tMESSAGE '(' ')' {create_function(fMESSAGE);}
   | tMOUSE tMESSAGE {create_function(fMOUSEMOVE);}
-  | tMOUSE tMESSAGE '(' ')' {create_function(fMOUSEMOVE);}  
+  | tMOUSE tMESSAGE '(' ')' {create_function(fMOUSEMOVE);}
   | tTRANSLATE '(' string_expression ')' {create_function(fTRANSLATE);}
   | tMENU tTRANSLATE '(' string_expression ')' {create_function(fMENUTRANSLATE);}
   | tTEXTEDIT tGET string_expression {create_function(fTEXTGET);}
@@ -488,7 +488,7 @@ string_function: tLEFT '(' string_expression ',' expression ')' {create_function
   | tATTRIBUTE tGET string_expression ',' string_expression {create_function(fATTRIBUTEGET1);}
   ;
 
-assignment: tSYMBOL tEQU expression {add_command(cPOPDBLSYM,dotify($1,FALSE));} 
+assignment: tSYMBOL tEQU expression {add_command(cPOPDBLSYM,dotify($1,FALSE));}
   | function_or_array tEQU expression {create_doarray($1,ASSIGNARRAY);}
   ;
 
@@ -674,7 +674,7 @@ calls: /* empty */
 call_item: string_expression
   | expression
   ;
- 
+
 function_definition: export tSUB {missing_endsub++;missing_endsub_line=mylineno;pushlabel();report_missing(WARNING,"do not define a function in a loop or an if-statement");if (function_type!=ftNONE) {error(ERROR,"nested functions not allowed");YYABORT;}}
 	function_name {if (exported) create_sublink($4); create_label($4,cUSER_FUNCTION);
 	               add_command(cPUSHSYMLIST,NULL);add_command(cCLEARREFS,NULL);firstref=lastref=lastcmd;
@@ -707,7 +707,7 @@ local_item: tSYMBOL {create_makelocal(dotify($1,FALSE),syNUMBER);}
   | tSYMBOL '(' call_list ')' {create_makelocal(dotify($1,FALSE),syARRAY);create_dim(dotify($1,FALSE),'d');}
   | tSTRSYM '(' call_list ')' {create_makelocal(dotify($1,FALSE),syARRAY);create_dim(dotify($1,FALSE),'s');}
   ;
-  
+
 static_list: static_item
   | static_list ',' static_item
   ;
@@ -717,23 +717,23 @@ static_item: tSYMBOL {create_makestatic(dotify($1,TRUE),syNUMBER);}
   | tSYMBOL '(' call_list ')' {create_makestatic(dotify($1,TRUE),syARRAY);create_dim(dotify($1,TRUE),'D');}
   | tSTRSYM '(' call_list ')' {create_makestatic(dotify($1,TRUE),syARRAY);create_dim(dotify($1,TRUE),'S');}
   ;
-  
+
 paramlist: /* empty */
   | paramitem
   | paramlist ',' paramitem
   ;
-  
+
 paramitem: tSYMBOL {create_require(stNUMBER);create_makelocal(dotify($1,FALSE),syNUMBER);add_command(cPOPDBLSYM,dotify($1,FALSE));}
   | tSTRSYM {create_require(stSTRING);create_makelocal(dotify($1,FALSE),sySTRING);add_command(cPOPSTRSYM,dotify($1,FALSE));}
   | tSYMBOL '(' ')' {create_require(stNUMBERARRAYREF);create_arraylink(dotify($1,FALSE),stNUMBERARRAYREF);}
   | tSTRSYM '(' ')' {create_require(stSTRINGARRAYREF);create_arraylink(dotify($1,FALSE),stSTRINGARRAYREF);}
   ;
 
-for_loop: tFOR {missing_next++;missing_next_line=mylineno;} tSYMBOL tEQU 
+for_loop: tFOR {missing_next++;missing_next_line=mylineno;} tSYMBOL tEQU
             {pushname(dotify($3,FALSE)); /* will be used by next_symbol to check equality */
 	     add_command(cRESETSKIPONCE,NULL);
 	     pushgoto();add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);}
-	  expression tTO expression 
+	  expression tTO expression
 	  step_part { /* pushes another expression */
 	     add_command(cSKIPONCE,NULL);
 	     pushlabel();
@@ -761,18 +761,18 @@ step_part: {create_pushdbl(1);} /* can be omitted */
   ;
 
 next_symbol:  {pop(stSTRING);}/* can be omitted */
-  | tSYMBOL {if (strcmp(pop(stSTRING)->pointer,dotify($1,FALSE))) 
+  | tSYMBOL {if (strcmp(pop(stSTRING)->pointer,dotify($1,FALSE)))
              {error(ERROR,"'for' and 'next' do not match"); YYABORT;}
            }
   ;
 
 switch_number_or_string: tSWITCH {push_switch_id();add_command(cPUSH_SWITCH_MARK,NULL);create_break_mark(0,1);
-	add_command(cCONTINUE_CORRECTION,NULL);} 
+	add_command(cCONTINUE_CORRECTION,NULL);}
                 number_or_string sep_list case_list default tSEND {create_break_mark(-1,0);add_command(cBREAK_HERE,NULL);create_break_mark(0,-1);add_command(cBREAK_HERE,NULL);create_clean_switch_mark(0,FALSE);pop_switch_id();}
   ;
 
-sep_list: tSEP {if ($1>=0) mylineno+=$1;} 
-  | sep_list tSEP {if ($2>=0) mylineno+=$2;} 
+sep_list: tSEP {if ($1>=0) mylineno+=$1;}
+  | sep_list tSEP {if ($2>=0) mylineno+=$2;}
   ;
 
 number_or_string: expression
@@ -802,19 +802,19 @@ loop: tEOPROG {if (missing_loop) {sprintf(string,"%d loop(s) are missing (last a
   ;
 
 
-while_loop: tWHILE {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=mylineno;pushgoto()} '(' expression ')'
+while_loop: tWHILE {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_wend++;missing_wend_line=mylineno;pushgoto();} '(' expression ')'
 	      {add_command(cDECIDE,NULL);
 	      pushlabel();}
 	      statement_list
             wend
-  ;	    
+  ;
 
 wend: tEOPROG {if (missing_wend) {sprintf(string,"%d wend(s) are missing (last at line %d)",missing_wend,missing_wend_line);error(ERROR,string);} YYABORT;}
   | tWEND {missing_wend--;swap();popgoto();poplabel();create_break_mark(0,-1);add_command(cBREAK_HERE,NULL);}
   ;
 
 
-repeat_loop: tREPEAT {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=mylineno;pushgoto();} 
+repeat_loop: tREPEAT {add_command(cCONTINUE_HERE,NULL);create_break_mark(0,1);missing_until++;missing_until_line=mylineno;pushgoto();}
 	       statement_list
 	     until
   ;
@@ -845,9 +845,9 @@ else_part: /* can be omitted */
 
 elsif_part: /* can be omitted */
   | tELSIF expression maybe_then
-    	{add_command(cDECIDE,NULL);pushlabel();} 
-    statement_list 
-	{swap();matchgoto();swap();poplabel();} 
+    	{add_command(cDECIDE,NULL);pushlabel();}
+    statement_list
+	{swap();matchgoto();swap();poplabel();}
     elsif_part
   ;
 
@@ -860,10 +860,10 @@ inputlist: input
   ;
 
 input: tSYMBOL {create_myread('d',tileol);add_command(cPOPDBLSYM,dotify($1,FALSE));}
-  | tSYMBOL '(' call_list ')' 
+  | tSYMBOL '(' call_list ')'
     	{create_myread('d',tileol);create_doarray(dotify($1,FALSE),ASSIGNARRAY);}
   | tSTRSYM {create_myread('s',tileol);add_command(cPOPSTRSYM,dotify($1,FALSE));}
-  | tSTRSYM '(' call_list ')' 
+  | tSTRSYM '(' call_list ')'
     	{create_myread('s',tileol);create_doarray(dotify($1,FALSE),ASSIGNSTRINGARRAY);}
   ;
 
@@ -872,10 +872,10 @@ readlist: readitem
   ;
 
 readitem: tSYMBOL {create_readdata('d');add_command(cPOPDBLSYM,dotify($1,FALSE));}
-  | tSYMBOL '(' call_list ')' 
+  | tSYMBOL '(' call_list ')'
     {create_readdata('d');create_doarray(dotify($1,FALSE),ASSIGNARRAY);}
   | tSTRSYM {create_readdata('s');add_command(cPOPSTRSYM,dotify($1,FALSE));}
-  | tSTRSYM '(' call_list ')' 
+  | tSTRSYM '(' call_list ')'
     {create_readdata('s');create_doarray(dotify($1,FALSE),ASSIGNSTRINGARRAY);}
   ;
 
@@ -888,7 +888,7 @@ datalist: tSTRING {create_strdata($1);}
 printlist:  /* possible empty */
   | expression using
   | printlist ',' expression using
-  | string_expression {create_print('s');} 
+  | string_expression {create_print('s');}
   | printlist ',' string_expression {create_print('s');}
   ;
 
@@ -904,7 +904,7 @@ inputbody: '#' tSYMBOL {add_command(cPUSHDBLSYM,dotify($2,FALSE));create_pps(cPU
   | {create_pushdbl(STDIO_STREAM);create_pps(cPUSHSTREAM,1);} prompt inputlist {create_pps(cPOPSTREAM,0);}
   ;
 
-prompt: /* empty */ {create_pushstr("?");create_print('s');} 
+prompt: /* empty */ {create_pushstr("?");create_print('s');}
   | tSTRING {create_pushstr($1);create_print('s');}
   ;
 
@@ -922,7 +922,7 @@ printintro: /* may be empty */ {create_pushdbl(STDIO_STREAM);create_pps(cPUSHSTR
   | tAT '(' expression ',' expression ')' tREVERSE {create_colour(1);create_pushdbl(STDIO_STREAM);create_pps(cPUSHSTREAM,0);add_command(cMOVE,NULL);}
   | tAT '(' expression ',' expression ')' tCOLOUR '(' string_expression ')' {create_colour(2);create_pushdbl(STDIO_STREAM);create_pps(cPUSHSTREAM,0);add_command(cMOVE,NULL);}
   | tAT '(' expression ',' expression ')' tCOLOUR '(' string_expression ',' string_expression ')' {create_colour(3);create_pushdbl(STDIO_STREAM);create_pps(cPUSHSTREAM,0);add_command(cMOVE,NULL);}
-  ;  
+  ;
 
 hashed_number: '#' expression
   | expression;

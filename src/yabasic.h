@@ -1,14 +1,14 @@
-/*  
+/*
 
     YABASIC ---  a simple Basic Interpreter
     written by Marc-Oliver Ihm 1995-2004
     homepage: www.yabasic.de
-    
+
     yabasic.h --- function prototypes and global variables
-    
-    This file is part of yabasic and may be copied only 
-    under the terms of either the Artistic License or 
-    the GNU General Public License (GPL), both of which 
+
+    This file is part of yabasic and may be copied only
+    under the terms of either the Artistic License or
+    the GNU General Public License (GPL), both of which
     can be found at www.yabasic.de
 
 */
@@ -42,7 +42,7 @@
 */
 
 #if defined(UNIX) && defined(WINDOWS)
-UNIX and WINDOWS are defined at once; check your compiler settings
+#error UNIX and WINDOWS are defined at once; check your compiler settings
 #endif
 
 
@@ -83,9 +83,6 @@ UNIX and WINDOWS are defined at once; check your compiler settings
 
 #ifndef BEOS
   #include <sys/ipc.h>
-  #include <X11/Xlib.h>
-  #include <X11/Xutil.h>
-  #include <X11/Intrinsic.h>
   #define XK_LATIN1
   #define XK_MISCELLANY
   #include <X11/keysymdef.h>
@@ -112,10 +109,10 @@ UNIX and WINDOWS are defined at once; check your compiler settings
 #include <signal.h>
 #include <ctype.h>
 
-#ifdef UNIX
-#ifndef LIBRARY_PATH
+#ifdef HAIKU
 #define LIBRARY_PATH "/boot/home/config/settings/yab"
-#endif
+#elif defined(UNIX)
+#define LIBRARY_PATH "/usr/lib"
 #endif
 
 #define OPEN_HAS_STREAM 1
@@ -291,7 +288,7 @@ enum streammodes { /* ways to access a stream */
 };
 
 enum functions { /* functions in yabasic (sorted by number of arguments) */
-  fRAN2,fDATE,fTIME,fMESSAGE,fNUMWINDOWS,fCLIPBOARDPASTE,fISCOMPUTERON,fMOUSEMOVE, 
+  fRAN2,fDATE,fTIME,fMESSAGE,fNUMWINDOWS,fCLIPBOARDPASTE,fISCOMPUTERON,fMOUSEMOVE,
   fZEROARGS,
   fINKEY,/* fMOUSEX,fMOUSEY,fMOUSEB,fMOUSEMOD,*/
   fSIN,fASIN,fCOS,fACOS,fTAN,
@@ -301,15 +298,15 @@ enum functions { /* functions in yabasic (sorted by number of arguments) */
   fKEYBOARD,fCOLUMNBOXCOUNT, fCALENDAR, fLISTBOXCOUNT, fTREEBOXCOUNT, fSTACKVIEWGET,
   fSPINCONTROLGET, fDROPBOXCOUNT, fSLIDERGET, fTEXTGET, fDRAWGET3, fTABVIEWGET,
   fLISTBOXGETNUM, fDROPBOXGETNUM, fCOLUMNBOXGETNUM, fTREEBOXGETNUM, fSOUND,
-  fONEARGS, 
+  fONEARGS,
   fDEC2,fATAN2,fLEFT,fAND,fOR,fEOR,fLOG2,
   fRIGHT,fINSTR,fRINSTR,fSTR2,fMOD,fMIN,fMAX,fPEEK3,fMID2,fWINDOWGET, fVIEWGET /* vasper */,
   fLISTBOXGET, fTREEBOXGET, fSCROLLBARGET, fSPLITVIEWGET, fDROPBOXGET, fCOLORCONTROLGET,
-  fTEXTGET2,fTEXTGET6,fDRAWGET2, fTEXTGET3, fMESSAGESEND, fTHREADKILL, fTHREADGET, fBITMAPGET, 
+  fTEXTGET2,fTEXTGET6,fDRAWGET2, fTEXTGET3, fMESSAGESEND, fTHREADKILL, fTHREADGET, fBITMAPGET,
   fBITMAPLOAD, fATTRIBUTEGET1, fATTRIBUTEGET2,
   fTWOARGS,
   fMID,fINSTR2,fRINSTR2,fSTR3,fCOLUMNBOXGET,fDRAWGET1,fTEXTGET4,fTEXTGET5,fPRINTER,
-  fLOAD, fTREEBOXGETOPT,fBITMAPSAVE, 
+  fLOAD, fTREEBOXGETOPT,fBITMAPSAVE,
   fTHREEARGS,
   fGETCHAR,fDRAWIMAGE,fPOPUPMENU,fSAVE,fDRAWGET4,fBITMAPCOLOR,
   fFOURARGS,
@@ -329,11 +326,11 @@ enum drawing_modes { /* various ways to draw */
 
 enum cmd_type { /* type of command */
   cFIRST_COMMAND, /* no command, just marks start of list */
-  
+
   cLABEL,cSUBLINK,cGOTO,cQGOTO,cGOSUB,cQGOSUB,cRETURN,  /* flow control */
   cEND,cEXIT,cBIND,cDECIDE,cSKIPPER,cNOP,cFINDNOP,cEXCEPTION,cANDSHORT,
   cORSHORT,cSKIPONCE,cRESETSKIPONCE,cCOMPILE,cEXECUTE,cEXECUTE2,
-  
+
   cDIM,cFUNCTION,cDOARRAY,cARRAYLINK,cPUSHARRAYREF,cCLEARREFS,   /* everything with "()" */
   cARDIM,cARSIZE,cTOKEN,cTOKEN2,cTOKENALT,cTOKENALT2,
   cSPLIT,cSPLIT2,cSPLITALT,cSPLITALT2,
@@ -352,13 +349,13 @@ enum cmd_type { /* type of command */
   cFUNCTION_OR_ARRAY,cSTRINGFUNCTION_OR_ARRAY,
 
   cPOKE,cPOKEFILE,cSWAP,cDUPLICATE,cDOCU,                  /* internals */
-  
+
   cAND,cOR,cNOT,cLT,cGT,cLE,cGE,cEQ,cNE,            /* comparisons */
   cSTREQ,cSTRNE,cSTRLT,cSTRLE,cSTRGT,cSTRGE,
-  
+
   cPUSHSTRSYM,cPOPSTRSYM,cPUSHSTR,cCONCAT,           /* string operations */
   cPUSHSTRPTR,cCHANGESTRING,cGLOB,
-  
+
   cPRINT,cREAD,cRESTORE,cQRESTORE,cONESTRING,         /* i/o operations */
   cREADDATA,cDATA,cOPEN,cCHECKOPEN,cCHECKSEEK,cCLOSE,cPUSHSTREAM,cPOPSTREAM,
   cSEEK,cSEEK2,cTESTEOF,cWAIT,cBELL,cMOVE,
@@ -368,22 +365,22 @@ enum cmd_type { /* type of command */
   cDOT,cLINE,cCIRCLE,cCLEARWIN,
   cOPENPRN,cCLOSEPRN,cMOVEORIGIN,cRECT,
   cPUTBIT, */
-  
-  cPUTCHAR, 
+
+  cPUTCHAR,
 
   cOPENWIN, cCLOSEWIN, cLAYOUT, cWINSET1, cWINSET2, cWINSET3, cWINSET4, /* Be Graphics */
   cBUTTON, cALERT, cMENU, cTEXTCONTROL, cCHECKBOX, cRADIOBUTTON, cWINCLEAR,
   cLISTBOX, cDROPBOX, cITEMADD, cITEMDEL, cITEMCLEAR, cLOCALIZE, cLOCALIZE2, cLOCALIZESTOP, cTEXT, cTEXT2, cTEXTALIGN,
-  cTEXTEDIT, cTEXTADD, cTEXTSET, cTEXTSET2, cTEXTCOLOR1, cTEXTCOLOR2, cTEXTSET3,  cTEXTCLEAR,  
+  cTEXTEDIT, cTEXTADD, cTEXTSET, cTEXTSET2, cTEXTCOLOR1, cTEXTCOLOR2, cTEXTSET3,  cTEXTCLEAR,
   cVIEW, cBOXVIEW, cTAB, cSLIDER1, cSLIDER2, cSLIDER3, cSLIDER4, cSLIDER5, cSLIDER6,
-  cOPTION1, cOPTION2, cOPTION3, cDROPZONE, cTEXTCONTROL2, cTEXTCONTROL3, cTEXTCONTROL4, 
+  cOPTION1, cOPTION2, cOPTION3, cDROPZONE, cTEXTCONTROL2, cTEXTCONTROL3, cTEXTCONTROL4,
   cCOLORCONTROL1, cCOLORCONTROL2, cTREEBOX1, cTREEBOX2, cTREEBOX3, cTREEBOX4, cTREEBOX5,
   cBUTTONIMAGE, cCHECKBOXIMAGE, cCHECKBOXSET, cRADIOSET, cTOOLTIP, cTOOLTIPCOLOR, cTREESORT,
   cLISTSORT, cFILEBOX, cFILEBOXADD2, cFILEBOXCLEAR, cCOLUMNBOXREMOVE,
   cCOLUMNBOXSELECT, cCOLUMNBOXADD, cDROPBOXSELECT, cMENU2, cSUBMENU1, cSUBMENU2, cCLIPBOARDCOPY,
-  cCOLUMNBOXCOLOR, cPRINTERCONFIG, cCALENDAR, cLISTBOXSELECT, cLISTBOXADD1, cLISTBOXADD2, 
+  cCOLUMNBOXCOLOR, cPRINTERCONFIG, cCALENDAR, cLISTBOXSELECT, cLISTBOXADD1, cLISTBOXADD2,
   cLISTBOXDEL2, cSCROLLBAR, cSCROLLBARSET1, cSCROLLBARSET2, cSCROLLBARSET3, cTREEBOX7, cTREEBOX8,
-  cTREEBOX9, cTREEBOX10, cTREEBOX11, cSPLITVIEW1, cSPLITVIEW2, cSPLITVIEW3, 
+  cTREEBOX9, cTREEBOX10, cTREEBOX11, cSPLITVIEW1, cSPLITVIEW2, cSPLITVIEW3,
   cSTACKVIEW1, cSTACKVIEW2, cTEXTURL1, cTEXTURL2, cDRAWSET3, cSPINCONTROL1, cTABSET, cTABDEL, cTABADD,
   cSPINCONTROL2, cDROPBOXREMOVE, cDROPBOXCLEAR, cSUBMENU3, cMENU3, cCALENDARSET,
   cDOT, cLINE, cCIRCLE,  cDRAWTEXT, cDRAWRECT, cTREEBOX12, cOPTION4, cOPTION5,
@@ -430,9 +427,9 @@ enum searchmodes { /* modes for searching labels */
   smSUB=1,smLINK=2,smLABEL=4,smGLOBAL=8
 };
 
-/* ------------- global types ---------------- */ 
+/* ------------- global types ---------------- */
 
-struct stackentry { /* one element on stack */ 
+struct stackentry { /* one element on stack */
   int type;     /* contents of entry */
   struct stackentry *next;
   struct stackentry *prev;
@@ -441,7 +438,7 @@ struct stackentry { /* one element on stack */
 };
 
 /*
-  symbols are organized as a stack of lists: for every procedure call 
+  symbols are organized as a stack of lists: for every procedure call
   a new list is pushed onto the stack; all local variables of this
   function are chained into this list. After return from this procedure,
   the whole list is discarded and one element is popped from
@@ -585,11 +582,11 @@ void localize();
 void localizestop();
 void localize2(struct command *, YabInterface* yab);
 void setlayout(struct command *, YabInterface* yab); /* set layout */
-void winset1(struct command *, YabInterface* yab); 
-void winset2(struct command *, YabInterface* yab); 
-void winset3(struct command *, YabInterface* yab); 
-void winset4(struct command *, YabInterface* yab); 
-void winclear(struct command *, YabInterface* yab); 
+void winset1(struct command *, YabInterface* yab);
+void winset2(struct command *, YabInterface* yab);
+void winset3(struct command *, YabInterface* yab);
+void winset4(struct command *, YabInterface* yab);
+void winclear(struct command *, YabInterface* yab);
 void textedit(struct command *, YabInterface* yab);
 void textadd(struct command *, YabInterface* yab);
 void textset(struct command *, YabInterface* yab);
@@ -618,7 +615,7 @@ void boxview(struct command *, YabInterface *yab); /* add a boxview */
 void tab(struct command *, YabInterface *yab); /* add a tab */
 void tabset(struct command *, YabInterface *yab); /* set a tab */
 void tabadd(struct command *, YabInterface *yab);
-void tabdel(struct command *, YabInterface *yab); 
+void tabdel(struct command *, YabInterface *yab);
 int tabviewget(const char* tab, YabInterface *yab, int line, const char* libname); /* get a tab */
 void drawdot(struct command *, YabInterface *yab); /* draw a dot */
 void drawline(struct command *, YabInterface *yab); /* draw a line */
@@ -771,15 +768,15 @@ void exception(struct command *); /* change handling of exceptions */
 void create_poke(char); /* create Command 'POKE' */
 void poke(); /* poke in internals */
 void pokefile(struct command *); /* poke into file */
-void create_dblrelop(char); /* create command dblrelop */ 
+void create_dblrelop(char); /* create command dblrelop */
 void dblrelop(struct command *);  /* compare topmost double-values */
 void concat(void); /* concetenates two strings from stack */
-void create_strrelop(char); /* create command strrelop */ 
+void create_strrelop(char); /* create command strrelop */
 void strrelop(struct command *);  /* compare topmost string-values */
 void create_changestring(int); /* create command 'changestring' */
 void changestring(struct command *); /* changes a string */
 void glob(void); /* check, if pattern globs string */
-void create_boole(char); /* create command boole */ 
+void create_boole(char); /* create command boole */
 void boole(struct command *);  /* perform and/or/not */
 void create_function(int); /* create command 'function' */
 void function(struct command *, YabInterface* yab); /* performs a function */
@@ -843,8 +840,8 @@ void skipper(void); /* used for on_goto/gosub, skip commands */
 void skiponce(struct command *); /* skip next command once */
 void resetskiponce(struct command *); /* find and reset next skip */
 void decide(void); /*  skips next command, if not 0 on stack */
-void logical_shortcut(struct command *type); /* shortcut and/or if possible */ 
-void create_doarray(char *,int); /* creates array-commands */ 
+void logical_shortcut(struct command *type); /* shortcut and/or if possible */
+void create_doarray(char *,int); /* creates array-commands */
 void doarray(struct command *);  /* call an array */
 void create_dim(char *,char); /* create command 'dim' */
 void dim(struct command *); /* get room for array */
