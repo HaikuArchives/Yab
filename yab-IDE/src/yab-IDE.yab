@@ -3849,6 +3849,7 @@ y=system("ls "+DataDir$+"/yab_work/BuildFactory")
 y=y+system("ls "+DataDir$+"/yab_work/Programs")
 if x=0  or y>0 then
 	system("cp -ur "+ideDir$+"/BuildFactory "+DataDir$+"/yab_work")
+	system("gcc -o /boot/home/config/non-packaged/data/yab_work/BuildFactory/yab-compress /boot/home/config/non-packaged/data/yab_work/BuildFactory/yab-compress.c -lz")
 	system ("unzip -o "+DataDir$+"/yab_work/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_work/BuildFactory/parts")
 	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
 
