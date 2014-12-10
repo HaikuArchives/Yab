@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
 
     filesize = file_size(argv[1]);
     buffer = (char*)malloc(filesize);
+    dest = (char*)malloc(filesize);
 
     // read source file into buffer
     fi = fopen(argv[1], "r");
