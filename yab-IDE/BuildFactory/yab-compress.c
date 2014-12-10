@@ -4,24 +4,30 @@
 
 unsigned long file_size(char *filename)
 {
+	unsigned long size;
     FILE *pFile = fopen(filename, "rb");
     fseek (pFile, 0, SEEK_END);
-    unsigned long size = ftell(pFile);
+    size = ftell(pFile);
     fclose (pFile);
     return size;
 }
 
 int main(int argc, char *argv[])
 {
+	unsigned long filesize;
+	char *buffer;
+	FILE *fi, *fo;
+    char *dest;
+    unsigned long destlen;
+    unsigned long i;
+	
     if(argc != 2) {
         printf("Usage: yab-compress <file.yab>\n\n");
-        return 1;
+        return 1; 
     }
-	unsigned long filesize;
-    filesize = file_size(argv[1]);
-    char *buffer = (char*)malloc(filesize);
 
-    FILE *fi, *fo;
+    filesize = file_size(argv[1]);
+    buffer = (char*)malloc(filesize);
 
     // read source file into buffer
     fi = fopen(argv[1], "r");
@@ -29,12 +35,9 @@ int main(int argc, char *argv[])
     fclose(fi);
 
     // compress buffer
-    char *dest;
-    unsigned long destlen;
     compress(dest, &destlen, buffer, filesize);
 
     // write compressed buffer to output
-    unsigned long i;
     fo = fopen("program.h", "w");
     fprintf(fo, "const char myProg[] = {");
     for(i=0; i < destlen; i++)
@@ -42,6 +45,5 @@ int main(int argc, char *argv[])
     fprintf(fo, "' ' };\n");
     fclose(fo);
 
-    return 0;
+	return 0;
 }
-
