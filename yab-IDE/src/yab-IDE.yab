@@ -7,7 +7,7 @@ doc
 doc The yab-IDE provides you with an integrated development suite for yab
 doc Enjoy.
 path()
-versionnumber$="2.2.2"
+versionnumber$="2.2.3"
 
 settingsRCSOff = true
 globalConfigDir$ = "/boot/home/config/settings/yab-ide/"
@@ -3849,7 +3849,6 @@ y=system("ls "+DataDir$+"/yab_work/BuildFactory")
 y=y+system("ls "+DataDir$+"/yab_work/Programs")
 if x=0  or y>0 then
 	system("cp -ur "+ideDir$+"/BuildFactory "+DataDir$+"/yab_work")
-	system("gcc -o /boot/home/config/non-packaged/data/yab_work/BuildFactory/yab-compress /boot/home/config/non-packaged/data/yab_work/BuildFactory/yab-compress.c -lz")
 	system ("unzip -o "+DataDir$+"/yab_work/BuildFactory/parts/yabstuff.zip -d "+DataDir$+"/yab_work/BuildFactory/parts")
 	system("cp -ur "+ideDir$+"/Programs "+DataDir$+"/yab_work")
 
