@@ -1,5 +1,3 @@
-bison.c
-bison.h
 CalendarControl.cpp
 CalendarControl.h
 config.h
@@ -20,6 +18,8 @@ SplitPane.h
 symbol.c
 URLView.cpp
 URLView.h
+yabasic.flex
+yabasic.bison
 yabasic.h
 YabBitmapView.cpp
 YabBitmapView.h

@@ -20,7 +20,7 @@ yab: YabMain.o YabInterface.o YabWindow.o YabView.o YabBitmapView.o YabFilePanel
 		YabFilePanelLooper.o YabList.o main.o function.o io.o graphic.o symbol.o bison.o flex.o  $(COLUMN) column/YabColumnType.o column/ColorTools.o \
 		YabStackView.o SplitPane.o URLView.o YabControlLook.o $(HAIKUTAB) Spinner.o $(TABLIB) CalendarControl.o \
 		$(LIBPATH) $(LIB)
-YabMain.o: YabMain.cpp 
+YabMain.o: YabMain.cpp
 	$(GPP) $(GPP_OPT) -c YabMain.cpp -o YabMain.o
 YabInterface.o: YabInterface.cpp YabInterface.h global.h YabMenu.h
 	$(GPP) $(GPP_OPT) -c YabInterface.cpp -o YabInterface.o
@@ -38,7 +38,7 @@ YabList.o: YabList.cpp YabList.h
 	$(GPP) $(GPP_OPT) -c YabList.cpp -o YabList.o
 YabText.o: YabText.cpp YabText.h
 	$(GPP) $(GPP_OPT) -c YabText.cpp -o YabText.o
-bison.o: bison.c yabasic.h config.h 
+bison.o: bison.c yabasic.h config.h
 	$(GCC) $(GCC_OPT) -c bison.c -o bison.o
 flex.o: flex.c bison.c yabasic.h config.h
 	$(GCC) $(GCC_OPT) -c flex.c -o flex.o
@@ -50,19 +50,23 @@ graphic.o: graphic.c yabasic.h config.h
 	$(GCC) $(GCC_OPT) -c graphic.c -o graphic.o
 symbol.o: symbol.c yabasic.h config.h
 	$(GCC) $(GCC_OPT) -c symbol.c -o symbol.o
-main.o: main.c yabasic.h config.h 
+main.o: main.c yabasic.h config.h
 	$(GCC) $(GCC_OPT) -c main.c -o main.o
+flex.c: yabasic.flex
+	flex $(FLEXFLAGS) -t yabasic.flex >flex.c
+bison.c: yabasic.bison
+	bison $(BISONFLAGS) --output-file bison.c yabasic.bison
 YabStackView.o: YabStackView.cpp YabStackView.h
 	$(GPP) $(GPP_OPT) -c YabStackView.cpp -o YabStackView.o
-SplitPane.o: SplitPane.cpp SplitPane.h 
+SplitPane.o: SplitPane.cpp SplitPane.h
 	$(GPP) $(GPP_OPT) -c SplitPane.cpp -o SplitPane.o
 URLView.o: URLView.cpp URLView.h
 	$(GPP) $(GPP_OPT) -c URLView.cpp -o URLView.o
 Spinner.o: Spinner.cpp Spinner.h
 	$(GPP) $(GPP_OPT) -c Spinner.cpp -o Spinner.o
-column/ColumnListView.o: column/ColumnListView.cpp column/ColumnListView.h column/ObjectList.h 
+column/ColumnListView.o: column/ColumnListView.cpp column/ColumnListView.h column/ObjectList.h
 	$(GPP) $(GPP_OPT) -c column/ColumnListView.cpp -o column/ColumnListView.o
-column/ColorTools.o: column/ColorTools.cpp column/ColorTools.h 
+column/ColorTools.o: column/ColorTools.cpp column/ColorTools.h
 	$(GPP) $(GPP_OPT) -c column/ColorTools.cpp -o column/ColorTools.o
 column/YabColumnType.o: column/YabColumnType.cpp column/YabColumnType.h
 	$(GPP) $(GPP_OPT) -c column/YabColumnType.cpp -o column/YabColumnType.o
